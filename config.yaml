@@ -1,0 +1,38 @@
+# Set in this file the parameters for the simulation
+
+# Timestep size
+dt: 0.01
+
+# Number of iterations
+it: 10000
+
+# Plot config
+plot:     True    # if True, it plots every plotSize iterations
+plotSize: 10000     # number of timesteps to plot together
+
+# Initial conditions
+# System 1
+x0: 10.0   # prey 1
+y0: 10.0   # predator 1
+# System 2
+z0: 30.0   # prey 2
+w0: 30.0   # predator 2
+
+# Parameters
+# The reference Lotka-Volterra equations are:
+# Prey:     dx = alpha*x - beta*x*y
+# Predator: dy = delta*x*y - gamma*y
+# System 1
+alpha1:  0.67
+beta1:   1.33
+gamma1:  1.0
+delta1:  1.0
+# System 2
+alpha2:  0.67
+beta2:   1.33
+gamma2:  1.0
+delta2:  1.0
+
+# Integration method
+useEulerForward:  True
+useRK4:           False
