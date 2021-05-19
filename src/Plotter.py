@@ -16,7 +16,7 @@ class Plotter:
         self.plotBuffer[1].append(y)
         self.plotBuffer[2].append(z)
         self.plotBuffer[3].append(w)
-        if self.plot and len(self.plotBuffer[0]) == self.config['plotSize']:
+        if self.plot and len(self.plotBuffer[0]) == min(self.config['plotSize'], self.config['it']):
             self.plot2d(self.plotBuffer[0], self.plotBuffer[1], 1)
             self.plot2d(self.plotBuffer[2], self.plotBuffer[3], 2)
             self.plotBuffer = [[], [], [], []]    # reset plotter buffer
