@@ -26,9 +26,12 @@ class Plotter:
         plots 2D vector
         '''
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9,7))
-        ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1)
-        ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2)
-        plt.title('System number' + str(systemN))
+        ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1, label = 'Prey')
+        ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'Predator')
+        plt.title('System number ' + str(systemN))
+        plt.xlabel('Time')
+        plt.ylabel('Population size')
+        ax.legend()
         plt.tight_layout()
         plt.show()
 
