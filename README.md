@@ -1,5 +1,5 @@
 # lotkavolterra-atic
-This is the repository of the project for the class Advance Topics In Control (2021) at ETHZ.
+This is the repository of the project for the class Advanced Topics In Control (2021) at ETHZ.
 
 Instructions:
 1. Set the desired parameters in the file `config.yaml` and save
