@@ -1,5 +1,9 @@
 # Set in this file the parameters for the simulation
 
+# Model to use
+useCoupled:   True
+useDecoupled: False
+
 # Timestep size
 dt: 0.001
 
@@ -18,20 +22,46 @@ y0: 10.0   # predator 1
 z0: 30.0   # prey 2
 w0: 30.0   # predator 2
 
-# Parameters
+# Parameters for coupled system
+# The reference Lotka-Volterra equations are:
+# dxi = xi(bi - sum_j(aij * xj))    ,    i=1,_,n
+# In the 4 species case, there are 20 parameters to be set (4 in b and 4x4 in a)
+b1:   1.1
+b2:   -0.1
+b3:   0.67
+b4:   -1.0
+
+a11:  0.0
+a12:  0.4
+a13:  0.0
+a14:  0.0
+a21:  -0.4
+a22:  0.0
+a23:  0.0
+a24:  0.0
+a31:  0.0
+a32:  1.33
+a33:  0.0
+a34:  0.0
+a41:  -1.0
+a42:  0.0
+a43:  0.0
+a44:  0.0
+
+# Parameters for decoupled system
 # The reference Lotka-Volterra equations are:
 # Prey:     dx = alpha*x - beta*x*y
 # Predator: dy = delta*x*y - gamma*y
 # System 1
 alpha1:  1.1
 beta1:   0.4
-gamma1:  0.1
-delta1:  0.4
+gamma1:  -0.1 # negative sign for the predator
+delta1:  -0.4 # negative sign for the predator
 # System 2
 alpha2:  0.67
 beta2:   1.33
-gamma2:  1.0
-delta2:  1.0
+gamma2:  -1.0
+delta2:  -1.0
 
 # Integration method
 useEulerForward:  False

@@ -2,6 +2,9 @@ from ConfigLoader import ConfigLoader
 from Plotter import Plotter
 
 class Dynamics:
+    '''
+    In this class the decoupled system of 2 groups of 2 animals is modeled
+    '''
     def __init__(self):
         config = ConfigLoader()
         self.config = config.params
@@ -17,7 +20,7 @@ class Dynamics:
             self.isFirstIteration = False
             return x0, y0
         x1 = x0 + self.dt * (alpha * x0 - beta * x0 * y0)
-        y1 = y0 + self.dt * (delta * x0 * y0 - gamma * y0)
+        y1 = y0 + self.dt * (gamma * y0 - delta * x0 * y0)
         return x1, y1
 
     def updateRK4(self, x0, y0, alpha, beta, gamma, delta):
@@ -26,7 +29,7 @@ class Dynamics:
             '''
             returns the dynamics of the system
             '''
-            return alpha * x0 - beta * x0 * y0, delta * x0 * y0 - gamma * y0
+            return alpha * x0 - beta * x0 * y0, gamma * y0 - delta * x0 * y0 
         k1x, k1y = f(x0, y0)
         k2x, k2y = f(x0 + 0.5 * dt * k1x, y0 + 0.5 * dt * k1y)
         k3x, k3y = f(x0 + 0.5 * dt * k2x, y0 + 0.5 * dt * k2y)
