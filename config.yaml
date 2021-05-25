@@ -11,7 +11,9 @@ dt: 0.001
 it: 300000
 
 # Plot config
-plot:     True    # if True, it plots every plotSize iterations
+plot:           True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
+plotEvolution:  True
+plotStateSpace: True
 plotSize: 300000     # number of timesteps to plot together
 
 # Initial conditions
