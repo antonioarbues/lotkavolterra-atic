@@ -18,11 +18,18 @@ class Plotter:
         self.plotBuffer[3].append(w)
         if self.plot and len(self.plotBuffer[0]) == min(self.config['plotSize'], self.config['it']):
             if self.config['useDecoupled']:
-                self.plot2d(self.plotBuffer[0], self.plotBuffer[1], 1)
-                self.plot2d(self.plotBuffer[2], self.plotBuffer[3], 2)
+                if self.config['plotEvolution']:
+                    self.plot2d(self.plotBuffer[0], self.plotBuffer[1], 1)
+                    self.plot2d(self.plotBuffer[2], self.plotBuffer[3], 2)
+                if self.config['plotStateSpace']:
+                    self.plotstatespace(self.plotBuffer[0], self.plotBuffer[1], 1)
+                    self.plotstatespace(self.plotBuffer[2], self.plotBuffer[3], 2)
                 self.plotBuffer = [[], [], [], []]    # reset plotter buffer
             elif self.config['useCoupled']:
-                self.plot2d4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3])
+                if self.config['plotEvolution']:
+                    self.plot2d4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3])
+                if self.config['plotStateSpace']:
+                    self.plotstatespace4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2], self.plotBuffer[3])
                 self.plotBuffer = [[], [], [], []]    # reset plotter buffer
 
 
@@ -39,6 +46,43 @@ class Plotter:
         ax.legend()
         plt.tight_layout()
         plt.show()
+    
+    def plotstatespace(self, v1, v2, systemN):
+        '''
+        plots the state space between two states
+        '''
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9,7))
+        ax.plot(v1, v2)
+        plt.title('State space of system number ' + str(systemN))
+        plt.xlabel('Time')
+        plt.ylabel('Population size')
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+
+    def plotstatespace4(self, v1, v2, v3, v4):
+        '''
+        plots the state space between four states in subplots
+        '''
+        fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(9,7))
+        ax1.plot(v1, v2, label='x1-x2')
+        ax2.plot(v1, v3, label='x1-x3')
+        ax3.plot(v1, v4, label='x1-x4')
+        ax4.plot(v2, v3, label='x2-x3')
+        ax5.plot(v2, v4, label='x2-x4')
+        ax6.plot(v3, v4, label='x3-x4')
+        # plt.title('State space of the coupled system')
+        # plt.xlabel('Time')
+        # plt.ylabel('Population size')
+        ax1.legend()
+        ax2.legend()
+        ax3.legend()
+        ax4.legend()
+        ax5.legend()
+        ax6.legend()
+        plt.tight_layout()
+        plt.show()
+
 
     def plot2d4(self, v1, v2, v3, v4):
         '''
