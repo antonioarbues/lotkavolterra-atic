@@ -11,10 +11,11 @@ dt: 0.001
 it: 300000
 
 # Plot config
-plot:           True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
-plotEvolution:  True
-plotStateSpace: True
-plotSize: 300000     # number of timesteps to plot together
+plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
+plotEvolution:    True
+plotStateSpace:   True
+plotVectorField:  True
+plotSize: 200000     # number of timesteps to plot together
 
 # Initial conditions
 # System 1
@@ -53,7 +54,7 @@ a44:  0.0
 # Parameters for decoupled system
 # The reference Lotka-Volterra equations are:
 # Prey:     dx = alpha*x - beta*x*y
-# Predator: dy = delta*x*y - gamma*y
+# Predator: dy = -delta*x*y + gamma*y
 # System 1
 alpha1:  1.1
 beta1:   0.4

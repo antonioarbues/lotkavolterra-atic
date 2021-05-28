@@ -10,25 +10,27 @@ class DynamicsUnited:
         self.config = config.params
         self.dt = self.config['dt']
         self.x0, self.y0, self.z0, self.w0 = self.setInitialConditions()
+        self.dx, self.dy, self.dz, self.dw = 0, 0, 0, 0
         self.a, self.b = self.setParameters()
         self.isFirstIteration = True
         self.plotter = Plotter()
 
+    def f(self, x0, y0, z0, w0, a, b):
+        '''
+        returns the dynamics of the coupled system
+        '''
+        dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0)
+        dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0)
+        dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0)
+        dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0)
+        return dx0, dy0, dz0, dw0
+
     def updateRK4(self, x0, y0, z0, w0, a, b):
         dt = self.dt
-        def f(x0, y0, z0, w0):
-            '''
-            returns the dynamics of the coupled system
-            '''
-            dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0)
-            dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0)
-            dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0)
-            dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0)
-            return dx0, dy0, dz0, dw0
-        k1x, k1y, k1z, k1w = f(x0, y0, z0, w0)
-        k2x, k2y, k2z, k2w = f(x0 + 0.5 * dt * k1x, y0 + 0.5 * dt * k1y, z0 + 0.5 * dt * k1z, w0 + 0.5 * dt * k1w)
-        k3x, k3y, k3z, k3w = f(x0 + 0.5 * dt * k2x, y0 + 0.5 * dt * k2y, z0 + 0.5 * dt * k2z, w0 + 0.5 * dt * k2w)
-        k4x, k4y, k4z, k4w = f(x0 + dt * k3x, y0 + dt * k3y, z0 + dt * k3z, w0 + dt * k3w)
+        k1x, k1y, k1z, k1w = self.f(x0, y0, z0, w0, a, b)
+        k2x, k2y, k2z, k2w = self.f(x0 + 0.5 * dt * k1x, y0 + 0.5 * dt * k1y, z0 + 0.5 * dt * k1z, w0 + 0.5 * dt * k1w, a, b)
+        k3x, k3y, k3z, k3w = self.f(x0 + 0.5 * dt * k2x, y0 + 0.5 * dt * k2y, z0 + 0.5 * dt * k2z, w0 + 0.5 * dt * k2w, a, b)
+        k4x, k4y, k4z, k4w = self.f(x0 + dt * k3x, y0 + dt * k3y, z0 + dt * k3z, w0 + dt * k3w, a, b)
         x1 = x0 + (1/6) * dt * (k1x + 2 * k2x + 2 * k3x + k4x)
         y1 = y0 + (1/6) * dt * (k1y + 2 * k2y + 2 * k3y + k4y)
         z1 = z0 + (1/6) * dt * (k1z + 2 * k2z + 2 * k3z + k4z)
@@ -40,16 +42,16 @@ class DynamicsUnited:
         '''
         returns the updated x1, y1, z1, w1
         '''
-        self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0)
+        self.dx, self.dy, self.dz, self.dw = self.f(self.x0, self.y0, self.z0, self.w0, self.a, self.b)
         if self.config['useRK4']:
             self.x0, self.y0, self.z0, self.w0 = self.updateRK4(self.x0, self.y0, self.z0, self.w0, self.a, self.b)
-            return self.x0, self.y0, self.z0, self.w0
 
         elif self.config['useEulerForward']:
             # self.x0, self.y0 = self.updateLVEuler(self.x0, self.y0, self.alpha1, self.beta1, self.gamma1, self.delta1)
             # self.z0, self.w0 = self.updateLVEuler(self.z0, self.w0, self.alpha2, self.beta2, self.gamma2, self.delta2)
             # return self.x0, self.y0, self.z0, self.w0
             print('Euler forward integration is not available yet.')
+        self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0, self.dx, self.dy, self.dz, self.dw)
 
     def setInitialConditions(self):
         return self.config['x0'], self.config['y0'], self.config['z0'], self.config['w0']
