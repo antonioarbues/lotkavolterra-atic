@@ -32,7 +32,8 @@ class Plotter:
                     self.plotstatespace(self.plotBuffer[0], self.plotBuffer[1], 1)
                     self.plotstatespace(self.plotBuffer[2], self.plotBuffer[3], 2)
                 if self.config['plotVectorField']:
-                    print('Vector Field plot yet to be implemented for the decoupled system')
+                    self.plot2dvf(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3], \
+                        self.derivativePlotBuffer[0], self.derivativePlotBuffer[1],self.derivativePlotBuffer[2], self.derivativePlotBuffer[3])
                 self.plotBuffer = [[], [], [], []]    # reset plotter buffer
             elif self.config['useCoupled']:
                 if self.config['plotEvolution']:
@@ -126,6 +127,17 @@ class Plotter:
         ax4.quiver(y,z,dy,dz, label = 'x2-x3')
         ax5.quiver(y,w,dy,dw, label = 'x2-x4')
         ax6.quiver(z,w,dz,dw, label = 'x3-x4')
+        plt.show()
+
+    def plot2dvf(self, x, y, z, w, dx, dy, dz, dw):
+        '''
+        plots 2D vector field
+        x and y are the coordinates of the arrows, u and v are the directions,
+        where for instance u=1, v=1 is a 45deg arrow
+        '''
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9,7))
+        ax1.quiver(x,y,dx,dy, label = 'x1-x2')
+        ax2.quiver(z,w,dz,dw, label = 'x3-x4')
         plt.show()
 
     def plot3dvf(self):
