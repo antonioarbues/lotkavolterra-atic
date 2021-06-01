@@ -44,13 +44,13 @@ b4:   -0.2
 
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
 a12:  0.08 #Effect on rabbit for rabbit/snake
-a13:  0.01  #Effect on rabbit for rabbit/deer 
+a13:  0.0005  #Effect on rabbit for rabbit/deer 
 a14:  0.04  #Effect on rabbit for rabbit/eagle 
 a21:  -0.05 #Effect on snake for snake/rabbit
 a22:  0.0 #Effect on snake for snake/snake
 a23:  -0.03 #Effect on snake for snake/deer
 a24:  0.01 #Effect on snake for snake/eagle
-a31:  -0.01 #Effect on deer for deer/rabbit
+a31:  -0.001 #Effect on deer for deer/rabbit
 a32:  0.04 #Effect on deer for deer/snake
 a33:  0.0 #Effect on deer for deer/deer
 a34:  0.03 #Effect on deer for deer/eagle
