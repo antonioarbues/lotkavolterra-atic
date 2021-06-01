@@ -1,8 +1,8 @@
 # Set in this file the parameters for the simulation
 
 # Model to use
-useCoupled:   True
-useDecoupled: False
+useCoupled:   False
+useDecoupled: True
 
 # Timestep size
 dt: 0.001
@@ -64,15 +64,15 @@ a44:  0.0 #Effect on eagle for eagle/eagle
 # Prey:     dx = alpha*x - beta*x*y
 # Predator: dy = -delta*x*y + gamma*y
 # System 1
-alpha1:  1.1
-beta1:   0.4
-gamma1:  -0.1 # negative sign for the predator
-delta1:  -0.4 # negative sign for the predator
+alpha1:  2.0
+beta1:   0.08
+gamma1:  -0.6 # negative sign for the predator
+delta1:  -0.05 # negative sign for the predator
 # System 2
-alpha2:  0.67
-beta2:   1.33
-gamma2:  -1.0
-delta2:  -1.0
+alpha2:  1.2
+beta2:   0.03
+gamma2:  -0.2
+delta2:  -0.05
 
 # Integration method
 useEulerForward:  False
