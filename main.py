@@ -3,11 +3,16 @@ sys.path.insert(1, "./src/")
 from src.ConfigLoader import ConfigLoader
 from src.Dynamics import Dynamics
 from src.DynamicsUnited import DynamicsUnited
+from src.FindEquilibria import FindEquilibria
 
 config = ConfigLoader()
 model = Dynamics()
 modelUnited = DynamicsUnited()
+findEquilibria = FindEquilibria()
 nIterations = config.params['it']
+
+if config.params['findEquilibria']:
+    findEquilibria.findEquilibria()
 
 for i in range(nIterations):
     if config.params['useDecoupled']:

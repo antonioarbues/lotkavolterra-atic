@@ -1,1 +1,0 @@
-# TODO write algorithm that finds equilibria automatically

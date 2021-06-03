@@ -1,8 +1,8 @@
 # Set in this file the parameters for the simulation
 
 # Model to use
-useCoupled:   False
-useDecoupled: True
+useCoupled:   True
+useDecoupled: False
 
 # Timestep size
 dt: 0.001
@@ -16,6 +16,13 @@ plotEvolution:    True
 plotStateSpace:   True
 plotVectorField:  True
 plotSize: 200000     # number of timesteps to plot together
+
+# Find and print equilibria
+findEquilibria: True
+
+# Equilibria tuning parameters
+X:  0.5
+Y:  0.25
 
 # Initial conditions
 # System 1
