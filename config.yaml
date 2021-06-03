@@ -1,8 +1,8 @@
 # Set in this file the parameters for the simulation
 
 # Model to use
-useCoupled:   False
-useDecoupled: True
+useCoupled:   True
+useDecoupled: False
 
 # Timestep size
 dt: 0.001
@@ -14,65 +14,63 @@ it: 300000
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
 plotEvolution:    True
 plotStateSpace:   True
-plotVectorField:  True
+plotVectorField:  False
 plotSize: 200000     # number of timesteps to plot together
 
 # Initial conditions
 # System 1
-x0: 10.0   # prey 1: Rabbit
+x0: 20.0   # prey 1: Rabbit
 y0: 10.0   # predator 1: Burmese Python
 # System 2
-z0: 30.0   # prey 2: Deer
-w0: 30.0   # predator 2: Eagle
+z0: 20.0   # prey 2: Deer
+w0: 10.0   # predator 2: Eagle
 
 # Parameters for coupled system
 # The reference Lotka-Volterra equations are:
-# dxi = xi(bi - sum_j(aij * xj))    ,    i=1,_,n
+# dxi/dt = xi(bi - sum_j(aij * xj))    ,    i=1,_,n
 # In the 4 species case, there are 20 parameters to be set (4 in b and 4x4 in a)
-# b1:   1.1
-# b2:   -0.1
-# b3:   0.67
-# b4:   -1.0
 
-#Baseline proposal 
+# Baseline parameters from separate predator-prey systems
+b1:   4.0 #Rabbit reproduction rate
+b2:  -1.0 #Snake death rate
+b3:   2.0 #Deer reproduction rate
+b4:  -1.0 #Eagle death rate
+a12:  0.5 #Effect on rabbit for rabbit/snake
+a21:  -1.0 #Effect on snake for snake/rabbit
+a34:  0.5 #Effect on deer for deer/eagle
+a43:  -1.0 #Effect on eagle for eagle/deer
 
-b1:   2.0
-b2:  -0.6
-b3:   0.2
-b4:   -0.2
+# Parameters to study
+a23:  -0.5 #Effect on snake for snake/deer
+a32:  0.25 #Effect on deer for snake/deer
+a24:  -0.25 #Effect on snake for snake/eagle
+a42:  0.125 #Effect on eagle for snake/eagle 
 
 
+# All other parameters which we don't study
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
-a12:  0.08 #Effect on rabbit for rabbit/snake
-a13:  0.0005  #Effect on rabbit for rabbit/deer 
-a14:  0.04  #Effect on rabbit for rabbit/eagle 
-a21:  -0.05 #Effect on snake for snake/rabbit
+a13:  0.0  #Effect on rabbit for rabbit/deer 
+a14:  0.0  #Effect on rabbit for rabbit/eagle 
 a22:  0.0 #Effect on snake for snake/snake
-a23:  -0.03 #Effect on snake for snake/deer
-a24:  0.01 #Effect on snake for snake/eagle
-a31:  -0.001 #Effect on deer for deer/rabbit
-a32:  0.04 #Effect on deer for deer/snake
+a31:  0.0 #Effect on deer for deer/rabbit
 a33:  0.0 #Effect on deer for deer/deer
-a34:  0.03 #Effect on deer for deer/eagle
-a41:  -0.03 #Effect on eagle for eagle/rabbit
-a42:  -0.05 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
-a43:  -0.05 #Effect on eagle for eagle/deer
+a41:  0.0 #Effect on eagle for eagle/rabbit
 a44:  0.0 #Effect on eagle for eagle/eagle
 
 # Parameters for decoupled system
 # The reference Lotka-Volterra equations are:
-# Prey:     dx = alpha*x - beta*x*y
-# Predator: dy = -delta*x*y + gamma*y
+# Prey:     dx/dt = alpha*x - beta*x*y
+# Predator: dy/dt = -delta*x*y + gamma*y
 # System 1
-alpha1:  2.0
-beta1:   0.08
-gamma1:  -0.6 # negative sign for the predator
-delta1:  -0.05 # negative sign for the predator
+alpha1:  4.0
+beta1:   0.5
+gamma1:  -1.0 # negative sign for the predator
+delta1:  -1.0 # negative sign for the predator
 # System 2
-alpha2:  1.2
-beta2:   0.03
-gamma2:  -0.2
-delta2:  -0.05
+alpha2:  3.0
+beta2:   0.5
+gamma2:  -1.0
+delta2:  -1.0
 
 # Integration method
 useEulerForward:  False
