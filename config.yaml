@@ -1,8 +1,8 @@
 # Set in this file the parameters for the simulation
 
 # Model to use
-useCoupled:   False
-useDecoupled: True
+useCoupled:   True
+useDecoupled: False
 
 # Timestep size
 dt: 0.001
@@ -36,28 +36,55 @@ w0: 30.0   # predator 2: Eagle
 
 #Baseline proposal 
 
-b1:   2.0
-b2:  -0.6
-b3:   0.2
-b4:   -0.2
+# b1:   2.0
+# b2:  -0.6
+# b3:   0.2
+# b4:   -0.2
 
+#Updated (Sandra)
+
+b1:   4.0
+b2:  -1.0
+b3:   2.0
+b4:   -1
+
+
+# a11:  0.0 #Effect on rabbit for rabbit/rabbit
+# a12:  0.08 #Effect on rabbit for rabbit/snake
+# a13:  0.0005  #Effect on rabbit for rabbit/deer 
+# a14:  0.04  #Effect on rabbit for rabbit/eagle 
+# a21:  -0.05 #Effect on snake for snake/rabbit
+# a22:  0.0 #Effect on snake for snake/snake
+# a23:  -0.03 #Effect on snake for snake/deer
+# a24:  0.01 #Effect on snake for snake/eagle
+# a31:  -0.001 #Effect on deer for deer/rabbit
+# a32:  0.04 #Effect on deer for deer/snake
+# a33:  0.0 #Effect on deer for deer/deer
+# a34:  0.03 #Effect on deer for deer/eagle
+# a41:  -0.03 #Effect on eagle for eagle/rabbit
+# a42:  -0.05 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
+# a43:  -0.05 #Effect on eagle for eagle/deer
+# a44:  0.0 #Effect on eagle for eagle/eagle
+
+X:    0.5
+Y:    0.25
 
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
-a12:  0.08 #Effect on rabbit for rabbit/snake
-a13:  0.0005  #Effect on rabbit for rabbit/deer 
-a14:  0.04  #Effect on rabbit for rabbit/eagle 
-a21:  -0.05 #Effect on snake for snake/rabbit
+a12:  0.5 #Effect on rabbit for rabbit/snake
+a13:  0.0  #Effect on rabbit for rabbit/deer 
+a14:  0.0  #Effect on rabbit for rabbit/eagle 
+a21:  -1.0 #Effect on snake for snake/rabbit
 a22:  0.0 #Effect on snake for snake/snake
-a23:  -0.03 #Effect on snake for snake/deer
-a24:  0.01 #Effect on snake for snake/eagle
-a31:  -0.001 #Effect on deer for deer/rabbit
-a32:  0.04 #Effect on deer for deer/snake
+a23:  -0.5 #Effect on snake for snake/deer
+a24:  -0.25 #Effect on snake for snake/eagle
+a31:  0 #Effect on deer for deer/rabbit
+a32:  0.25 #Effect on deer for deer/snake
 a33:  0.0 #Effect on deer for deer/deer
-a34:  0.03 #Effect on deer for deer/eagle
-a41:  -0.03 #Effect on eagle for eagle/rabbit
-a42:  -0.05 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
-a43:  -0.05 #Effect on eagle for eagle/deer
-a44:  0.0 #Effect on eagle for eagle/eagle
+a34:  0.5 #Effect on deer for deer/eagle
+a41:  0.0 #Effect on eagle for eagle/rabbit
+a42:  0.125 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
+a43:  -1 #Effect on eagle for eagle/deer
+a44:  0 #Effect on eagle for eagle/eagle
 
 # Parameters for decoupled system
 # The reference Lotka-Volterra equations are:
