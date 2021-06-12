@@ -45,6 +45,7 @@ eq = inv(A) * b
 n_iter = 10;
 
 eig_tab = cell(1,n_iter);
+div_tab = cell(1,n_iter);
 
 figure()
 
@@ -69,25 +70,29 @@ for n = 1:n_iter
     
    eq = inv(A) * b;
     
-   [check_deval, check_eigs] = linearise(eq,A,b);
+   [check_deval, check_eigs, div] = linearise(eq,A,b);
    
    eig_tab{n} = check_eigs;
+   div_tab{n} = div;
    
-   hold on %Plot the eigenvalues
-   %legend('X = ',num2str(X),'Y =', num2str(Y))
+   %Plot the eigenvalues
+   hold on
    string = sprintf('X= %G Y =%G', X, Y);
    plot(eig_tab{n}, 'o','DisplayName', [string]);
+   xlabel('Real')
+   ylabel('Imaginary')
    legend('show')
-   
-
-   
+  
 end
 
+xline(0)
+yline(0)
 
-%% Linearise about equlibria
+%Check for global stability...to be implemented 
 
-function[dd_eval, Eigens] = linearise(equilibria, A, b)
+%% Linearise about equlibria. compute eigenvalues and divergence
 
+function[dd_eval, Eigens, div] = linearise(equilibria, A, b)
 
 syms x y z w
 
@@ -102,8 +107,6 @@ dd = [diff(dx,x) diff(dx,y) diff(dx,z) diff(dx,w);
     diff(dy,x) diff(dy,y) diff(dy,z) diff(dy,w);
     diff(dz,x) diff(dz,y) diff(dz,z) diff(dz,w)
     diff(dw,x) diff(dw,y) diff(dw,z) diff(dw,w);];
-
-
 
 %Evaluate the matrix at the equilibrium points: 
 
@@ -121,11 +124,17 @@ for i = 1:4
     end
 end
 
-
 %Compute the matrix eigenvalues:
 Eigens = eigs(dd_eval);
+
+%Compute the divergence
+div = diff(dx,x) + diff(dy,y) +  diff(dz,z) + diff(dw,w);
 end 
 
+
+%% Computing the divergence in order to check for a non-existence of the limit cycle
+
+ 
 
 
 
