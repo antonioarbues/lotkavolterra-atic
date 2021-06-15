@@ -88,7 +88,12 @@ end
 xline(0)
 yline(0)
 
-%Check for global stability...to be implemented 
+%Check for global stability...to be implemented
+
+
+%Extension to equilibria investigation 
+
+%Plug in X and Y values and investigate whether equilibria is stable? 
 
 %% Linearise about equlibria. compute eigenvalues and divergence
 
