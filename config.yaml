@@ -15,6 +15,7 @@ plot:             True    # if True, it plots every plotSize iterations. If fals
 plotEvolution:    True
 plotStateSpace:   True
 plotVectorField:  False
+plotEigenvalues:  True
 plotSize: 200000     # number of timesteps to plot together
 
 # Initial conditions

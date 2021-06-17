@@ -110,7 +110,7 @@ dw = w * (b(4) - A(4,1)*x - A(4,2)*y - A(4,3)*z - A(4,4)*w);
 
 dd = [diff(dx,x) diff(dx,y) diff(dx,z) diff(dx,w);
     diff(dy,x) diff(dy,y) diff(dy,z) diff(dy,w);
-    diff(dz,x) diff(dz,y) diff(dz,z) diff(dz,w)
+    diff(dz,x) diff(dz,y) diff(dz,z) diff(dz,w);
     diff(dw,x) diff(dw,y) diff(dw,z) diff(dw,w);];
 
 %Evaluate the matrix at the equilibrium points: 

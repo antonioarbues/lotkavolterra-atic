@@ -11,7 +11,7 @@ modelUnited = DynamicsUnited()
 nIterations = config.params['it']
 equilibria = FindEquilibria()
 
-equilibria.findEquilibria()
+equilibria.getEigens()
 
 for i in range(nIterations):
     if config.params['useDecoupled']:

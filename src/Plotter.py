@@ -146,6 +146,12 @@ class Plotter:
         '''
         pass
 
+    def plotEigen(self, eigens):
+        x = [a.real for a in eigens]
+        y = [a.imag for a in eigens]
+        plt.scatter(x, y, color='red')
+        plt.show()
+
 
 # for testing:
 if __name__ == '__main__':
