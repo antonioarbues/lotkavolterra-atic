@@ -3,7 +3,7 @@ sys.path.insert(1, "./src/")
 from src.ConfigLoader import ConfigLoader
 from src.Dynamics import Dynamics
 from src.DynamicsUnited import DynamicsUnited
-from src.FindEquilibrium import FindEquilibria
+from src.FindEquilibria import FindEquilibria
 
 config = ConfigLoader()
 model = Dynamics()
