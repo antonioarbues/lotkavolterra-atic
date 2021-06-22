@@ -32,14 +32,14 @@ w0: 10.0   # predator 2: Eagle
 # In the 4 species case, there are 20 parameters to be set (4 in b and 4x4 in a)
 
 # Baseline parameters from separate predator-prey systems
-b1:   4.0 #Rabbit reproduction rate
-b2:  -1.0 #Snake death rate
-b3:   2.0 #Deer reproduction rate
-b4:  -1.0 #Eagle death rate
-a12:  0.5 #Effect on rabbit for rabbit/snake
-a21:  -1.0 #Effect on snake for snake/rabbit
-a34:  0.5 #Effect on deer for deer/eagle
-a43:  -1.0 #Effect on eagle for eagle/deer
+# b1:   4.0 #Rabbit reproduction rate
+# b2:  -1.0 #Snake death rate
+# b3:   2.0 #Deer reproduction rate
+# b4:  -1.0 #Eagle death rate
+# a12:  0.5 #Effect on rabbit for rabbit/snake
+# a21:  -1.0 #Effect on snake for snake/rabbit
+# a34:  0.5 #Effect on deer for deer/eagle
+# a43:  -1.0 #Effect on eagle for eagle/deer
 
 # b1:   2.0
 # b2:  -0.6
