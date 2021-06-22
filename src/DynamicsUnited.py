@@ -1,5 +1,7 @@
 from ConfigLoader import ConfigLoader
 from Plotter import Plotter
+from FindEquilibria import FindEquilibria
+import numpy as np
 
 class DynamicsUnited:
     '''
@@ -12,6 +14,8 @@ class DynamicsUnited:
         self.x0, self.y0, self.z0, self.w0 = self.setInitialConditions()
         self.dx, self.dy, self.dz, self.dw = 0, 0, 0, 0
         self.a, self.b = self.setParameters()
+        self.kp, self.sigma = self.setPositiveControlParameters()
+        self.e = self.findEquilibria()
         self.isFirstIteration = True
         self.plotter = Plotter()
 
@@ -19,10 +23,25 @@ class DynamicsUnited:
         '''
         returns the dynamics of the coupled system
         '''
-        dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0)
-        dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0)
-        dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0)
-        dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0)
+        # Closed Loop dynamics
+        if self.config['useControl']:
+            if self.config['usePositiveControl']:
+                # CL dynamics with Positive Control: dx/dt = diag(x)*(A*(x-e)+k*u)
+                k = np.array(self.kp)
+                e = np.array(self.e)
+                x = np.array([x0, y0, z0, w0])
+                sigma = self.sigma
+                u = sigma * (-np.matmul(np.transpose(k), (x - e)))
+                #print('control input u=' + str(u))
+                dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u)
+                dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u)
+                dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0 + k[2]*u)
+                dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0 + k[3]*u)
+        else:
+            dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0)
+            dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0)
+            dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0)
+            dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0)
         return dx0, dy0, dz0, dw0
 
     def updateRK4(self, x0, y0, z0, w0, a, b):
@@ -63,6 +82,16 @@ class DynamicsUnited:
             [self.config['a41'], self.config['a42'], self.config['a43'], self.config['a44']]]
         b = [self.config['b1'], self.config['b2'], self.config['b3'], self.config['b4']]
         return a, b
+    
+    def setPositiveControlParameters(self):
+        k = [self.config['k1'], self.config['k2'], self.config['k3'], self.config['k4']]
+        sigma = self.config['sigma']
+        return k, sigma
+
+    def findEquilibria(self):
+        equilibria = FindEquilibria()
+        e = equilibria.findEquilibria(printEq=False)
+        return e
 
 # for testing:
 if __name__ == '__main__':

@@ -21,11 +21,12 @@ class FindEquilibria:
         b = [self.config['b1'], self.config['b2'], self.config['b3'], self.config['b4']]
         return a, b
 
-    def findEquilibria(self):
-        eq = np.matmul(np.linalg.inv(np.array(self.a)), self.b)
+    def findEquilibria(self, printEq=True):
+        eq = np.matmul(np.linalg.inv(np.array(self.a)), self.b).tolist()
         print('The equilibria of the system are:\n')
-        for el in eq:
-            print(str(el) + '\n')
+        if printEq:
+            for el in eq:
+                print(str(el) + '\n')
         return eq
 
     def linearise(self, equilibrium):
@@ -44,7 +45,7 @@ class FindEquilibria:
     
     def getEigens(self):
         eq = self.findEquilibria()
-        dyn_lin = self.linearise(eq.tolist())
+        dyn_lin = self.linearise(eq)
         eigenvalues, _ = LA.eig(dyn_lin)
         if self.config['plotEigenvalues']:
             self.plotter.plotEigen(eigenvalues)

@@ -4,11 +4,16 @@
 useCoupled:   True
 useDecoupled: False
 
+# Control
+useControl: True
+# Select the control to use
+usePositiveControl: True
+
 # Timestep size
 dt: 0.001
 
 # Number of iterations
-it: 300000
+it: 10000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
@@ -26,53 +31,31 @@ y0: 10.0   # predator 1: Burmese Python
 z0: 20.0   # prey 2: Deer
 w0: 10.0   # predator 2: Eagle
 
+# Control Parameters
+
+# Positive Control: dx/dt = diag(x)*(A*(x-e)+k*u)
+k1: 1.0
+k2: 1.0
+k3: 1.0
+k4: 1.0
+sigma:  1.0
+
 # Parameters for coupled system
 # The reference Lotka-Volterra equations are:
 # dxi/dt = xi(bi - sum_j(aij * xj))    ,    i=1,_,n
 # In the 4 species case, there are 20 parameters to be set (4 in b and 4x4 in a)
-
-# Baseline parameters from separate predator-prey systems
-# b1:   4.0 #Rabbit reproduction rate
-# b2:  -1.0 #Snake death rate
-# b3:   2.0 #Deer reproduction rate
-# b4:  -1.0 #Eagle death rate
-# a12:  0.5 #Effect on rabbit for rabbit/snake
-# a21:  -1.0 #Effect on snake for snake/rabbit
-# a34:  0.5 #Effect on deer for deer/eagle
-# a43:  -1.0 #Effect on eagle for eagle/deer
-
-# b1:   2.0
-# b2:  -0.6
-# b3:   0.2
-# b4:   -0.2
-
-#Updated (Sandra)
 
 b1:   4.0
 b2:  -1.0
 b3:   2.0
 b4:   -1
 
-
-# a11:  0.0 #Effect on rabbit for rabbit/rabbit
-# a12:  0.08 #Effect on rabbit for rabbit/snake
-# a13:  0.0005  #Effect on rabbit for rabbit/deer 
-# a14:  0.04  #Effect on rabbit for rabbit/eagle 
-# a21:  -0.05 #Effect on snake for snake/rabbit
-# a22:  0.0 #Effect on snake for snake/snake
-# a23:  -0.03 #Effect on snake for snake/deer
-# a24:  0.01 #Effect on snake for snake/eagle
-# a31:  -0.001 #Effect on deer for deer/rabbit
-# a32:  0.04 #Effect on deer for deer/snake
-# a33:  0.0 #Effect on deer for deer/deer
-# a34:  0.03 #Effect on deer for deer/eagle
-# a41:  -0.03 #Effect on eagle for eagle/rabbit
-# a42:  -0.05 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
-# a43:  -0.05 #Effect on eagle for eagle/deer
-# a44:  0.0 #Effect on eagle for eagle/eagle
-
-X:    0.5
-Y:    0.25
+# For reference we set also X and Y even if they are not implemented actively in the code
+# (their effect is implemented in the following aij coefficients)
+# a23=-X, a32=X/2
+# a24=-Y, a42=Y/2
+X:    0.4
+Y:    0.2
 
 # All other parameters which we don't study
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
@@ -81,14 +64,14 @@ a13:  0.0  #Effect on rabbit for rabbit/deer
 a14:  0.0  #Effect on rabbit for rabbit/eagle 
 a21:  -1.0 #Effect on snake for snake/rabbit
 a22:  0.0 #Effect on snake for snake/snake
-a23:  -0.5 #Effect on snake for snake/deer
-a24:  -0.25 #Effect on snake for snake/eagle
+a23:  -0.4 #Effect on snake for snake/deer
+a24:  -0.2 #Effect on snake for snake/eagle
 a31:  0 #Effect on deer for deer/rabbit
-a32:  0.25 #Effect on deer for deer/snake
+a32:  0.2 #Effect on deer for deer/snake
 a33:  0.0 #Effect on deer for deer/deer
 a34:  0.5 #Effect on deer for deer/eagle
 a41:  0.0 #Effect on eagle for eagle/rabbit
-a42:  0.125 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
+a42:  0.1 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
 a43:  -1 #Effect on eagle for eagle/deer
 a44:  0 #Effect on eagle for eagle/eagle
 
