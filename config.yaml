@@ -5,7 +5,7 @@ useCoupled:   True
 useDecoupled: False
 
 # Control
-useControl: True
+useControl: False
 # Select the control to use
 usePositiveControl: True
 
@@ -13,14 +13,15 @@ usePositiveControl: True
 dt: 0.001
 
 # Number of iterations
-it: 10000
+it: 5000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
 plotEvolution:    True
-plotStateSpace:   True
+plotStateSpace:   False
 plotVectorField:  False
-plotEigenvalues:  True
+plotEigenvalues:  False
+resetPlotBuffer:  False   # Set to False if running comparison among different IC
 plotSize: 200000     # number of timesteps to plot together
 
 # Initial conditions
@@ -50,8 +51,7 @@ b2:  -1.0
 b3:   2.0
 b4:   -1
 
-# For reference we set also X and Y even if they are not implemented actively in the code
-# (their effect is implemented in the following aij coefficients)
+# If X and Y are defined, they overwrite the following values
 # a23=-X, a32=X/2
 # a24=-Y, a42=Y/2
 X:    0.4
@@ -93,3 +93,35 @@ delta2:  -1.0
 # Integration method
 useEulerForward:  False
 useRK4:           True
+
+# Comparison among different Initial Conditions
+compareIC:  False
+n_IC: 3 # number of IC to try out
+
+# System 1
+x1: 10.0   # prey 1: Rabbit
+y1: 10.0   # predator 1: Burmese Python
+# System 2
+z1: 20.0   # prey 2: Deer
+w1: 10.0   # predator 2: Eagle
+
+# System 1
+x2: 50.0   # prey 1: Rabbit
+y2: 20.0   # predator 1: Burmese Python
+# System 2
+z2: 50.0   # prey 2: Deer
+w2: 10.0   # predator 2: Eagle
+
+# System 1
+x3: 20.0   # prey 1: Rabbit
+y3: 20.0   # predator 1: Burmese Python
+# System 2
+z3: 20.0   # prey 2: Deer
+w3: 10.0   # predator 2: Eagle
+
+# X1: 0.9
+# Y1: 0.6
+# X2: 0.35
+# Y2: 0.15
+# X3: 0.3
+# Y3: 0.1

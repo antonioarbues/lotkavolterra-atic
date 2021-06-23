@@ -43,8 +43,10 @@ class Plotter:
                 if self.config['plotVectorField']:
                     self.plot2dvf4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3], \
                         self.derivativePlotBuffer[0], self.derivativePlotBuffer[1],self.derivativePlotBuffer[2], self.derivativePlotBuffer[3])
-                self.plotBuffer = [[], [], [], []]    # reset plotter buffer
-                self.derivativePlotBuffer = [[], [], [], []]
+                if self.config['resetPlotBuffer']:
+                    self.plotBuffer = [[], [], [], []]    # reset plotter buffer
+                    self.derivativePlotBuffer = [[], [], [], []]
+        return self.plotBuffer, self.derivativePlotBuffer
 
 
     def plot2d(self, v1, v2, systemN):
