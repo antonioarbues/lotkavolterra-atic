@@ -14,6 +14,9 @@ equilibria = FindEquilibria()
 
 equilibria.getEigens()
 
+if config.params['plotStabilityXY'] and config.params['useCoupled']:
+    modelUnited.plotStabilityXY()
+
 # Simulation of a single system
 if not config.params['compareIC']:
     for i in range(nIterations):

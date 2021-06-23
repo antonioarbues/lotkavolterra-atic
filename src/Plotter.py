@@ -154,6 +154,13 @@ class Plotter:
         plt.scatter(x, y, color='red')
         plt.show()
 
+    def plotStability(self, X_st, Y_st, X_unst, Y_unst):
+        plt.scatter(X_st, Y_st, color='green')
+        plt.scatter(X_unst, Y_unst, color='red')
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.show()
+
 
 # for testing:
 if __name__ == '__main__':

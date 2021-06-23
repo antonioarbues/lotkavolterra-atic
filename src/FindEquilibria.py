@@ -19,14 +19,26 @@ class FindEquilibria:
             [self.config['a31'], self.config['a32'], self.config['a33'], self.config['a34']], \
             [self.config['a41'], self.config['a42'], self.config['a43'], self.config['a44']]]
         b = [self.config['b1'], self.config['b2'], self.config['b3'], self.config['b4']]
+
+        if 'X' in self.config and 'Y' in self.config:
+            X = self.config['X']
+            Y = self.config['Y']
+            a[1][2] = -X
+            a[2][1] = X/2
+            a[1][3] = -Y
+            a[3][1] = Y/2
         return a, b
+    
+    def setParametersAgain(self):
+        self.a, self.b = self.setParameters()
 
     def findEquilibria(self, printEq=True):
         eq = np.matmul(np.linalg.inv(np.array(self.a)), self.b).tolist()
-        print('The equilibria of the system are:\n')
-        if printEq:
-            for el in eq:
-                print(str(el) + '\n')
+        if self.config['printEquilibria']:
+            print('The equilibria of the system are:\n')
+            if printEq:
+                for el in eq:
+                    print(str(el) + '\n')
         return eq
 
     def linearise(self, equilibrium):

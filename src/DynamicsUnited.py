@@ -106,6 +106,35 @@ class DynamicsUnited:
         equilibria = FindEquilibria()
         e = equilibria.findEquilibria(printEq=False)
         return e
+    
+    def plotStabilityXY(self):
+        X_st = []
+        X_unst = []
+        Y_st = []
+        Y_unst = []
+        range_stab = 15
+        for i in range(0, range_stab):
+            for j in range (0, range_stab):
+                equilibria = FindEquilibria()
+                equilibria.config['X'] = i / range_stab
+                equilibria.config['Y'] = j / range_stab
+                equilibria.setParametersAgain()
+                eigs = equilibria.getEigens()
+                stable = True
+                for el in eigs:
+                    if el.real > 0:
+                        stable = False
+                if stable:
+                    X_st.append(i/range_stab)
+                    Y_st.append(j/range_stab)
+                else:
+                    X_unst.append(i/range_stab)
+                    Y_unst.append(j/range_stab)
+
+        self.plotter.plotStability(X_st, Y_st, X_unst, Y_unst)
+
+        equilibria = FindEquilibria()   # reset config X and Y
+    
 
 # for testing:
 if __name__ == '__main__':

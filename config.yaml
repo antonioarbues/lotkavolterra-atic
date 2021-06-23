@@ -21,8 +21,12 @@ plotEvolution:    True
 plotStateSpace:   False
 plotVectorField:  False
 plotEigenvalues:  False
+plotStabilityXY:  True    # Generate plot with stability as a function of X, Y
 resetPlotBuffer:  False   # Set to False if running comparison among different IC
 plotSize: 200000     # number of timesteps to plot together
+
+# Print config (in terminal)
+printEquilibria:  False
 
 # Initial conditions
 # System 1
@@ -60,8 +64,8 @@ Y:    0.2
 # All other parameters which we don't study
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
 a12:  0.5 #Effect on rabbit for rabbit/snake
-a13:  0.0  #Effect on rabbit for rabbit/deer 
-a14:  0.0  #Effect on rabbit for rabbit/eagle 
+a13:  0.0  #Effect on rabbit for rabbit/deer
+a14:  0.0  #Effect on rabbit for rabbit/eagle
 a21:  -1.0 #Effect on snake for snake/rabbit
 a22:  0.0 #Effect on snake for snake/snake
 a23:  -0.4 #Effect on snake for snake/deer
@@ -119,9 +123,5 @@ y3: 20.0   # predator 1: Burmese Python
 z3: 20.0   # prey 2: Deer
 w3: 10.0   # predator 2: Eagle
 
-# X1: 0.9
-# Y1: 0.6
-# X2: 0.35
-# Y2: 0.15
-# X3: 0.3
-# Y3: 0.1
+# Stability plot for different X and Y
+stability_discretization: 15
