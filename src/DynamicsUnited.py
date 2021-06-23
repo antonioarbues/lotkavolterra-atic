@@ -112,7 +112,7 @@ class DynamicsUnited:
         X_unst = []
         Y_st = []
         Y_unst = []
-        range_stab = 15
+        range_stab = self.config['stability_discretization']
         for i in range(0, range_stab):
             for j in range (0, range_stab):
                 equilibria = FindEquilibria()
