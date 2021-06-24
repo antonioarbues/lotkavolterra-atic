@@ -1,24 +1,24 @@
 # Set in this file the parameters for the simulation
 
 # Model to use
-useCoupled:   True
-useDecoupled: False
+useCoupled:   False 
+useDecoupled: True
 
 # Control
 useControl: False
 # Select the control to use
-usePositiveControl: True
+usePositiveControl: False
 
 # Timestep size
 dt: 0.001
 
 # Number of iterations
-it: 5000
+it: 50000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
 plotEvolution:    True
-plotStateSpace:   False
+plotStateSpace:   True
 plotVectorField:  False
 plotEigenvalues:  False
 plotStabilityXY:  True    # Generate plot with stability as a function of X, Y
