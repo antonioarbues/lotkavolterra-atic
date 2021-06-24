@@ -58,8 +58,8 @@ b4:   -1
 # If X and Y are defined, they overwrite the following values
 # a23=-X, a32=X/2
 # a24=-Y, a42=Y/2
-X:    0.4
-Y:    0.2
+X:    0.28
+Y:    0.24
 
 # All other parameters which we don't study
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
@@ -68,14 +68,14 @@ a13:  0.0  #Effect on rabbit for rabbit/deer
 a14:  0.0  #Effect on rabbit for rabbit/eagle
 a21:  -1.0 #Effect on snake for snake/rabbit
 a22:  0.0 #Effect on snake for snake/snake
-a23:  -0.4 #Effect on snake for snake/deer
-a24:  -0.2 #Effect on snake for snake/eagle
+a23:  -0.28 #Effect on snake for snake/deer
+a24:  -0.24 #Effect on snake for snake/eagle
 a31:  0 #Effect on deer for deer/rabbit
-a32:  0.2 #Effect on deer for deer/snake
+a32:  0.14 #Effect on deer for deer/snake
 a33:  0.0 #Effect on deer for deer/deer
 a34:  0.5 #Effect on deer for deer/eagle
 a41:  0.0 #Effect on eagle for eagle/rabbit
-a42:  0.1 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
+a42:  0.12 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
 a43:  -1 #Effect on eagle for eagle/deer
 a44:  0 #Effect on eagle for eagle/eagle
 
