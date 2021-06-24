@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from ConfigLoader import ConfigLoader
 
 
@@ -43,6 +44,8 @@ class Plotter:
                 if self.config['plotVectorField']:
                     self.plot2dvf4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3], \
                         self.derivativePlotBuffer[0], self.derivativePlotBuffer[1],self.derivativePlotBuffer[2], self.derivativePlotBuffer[3])
+                if self.config['plot4dLimitCycle']:
+                    self.plot4dLimitcycle(self.plotBuffer[0], self.plotBuffer[1],self.plotBuffer[2], self.plotBuffer[3])
                 if self.config['resetPlotBuffer']:
                     self.plotBuffer = [[], [], [], []]    # reset plotter buffer
                     self.derivativePlotBuffer = [[], [], [], []]
@@ -160,6 +163,18 @@ class Plotter:
         plt.xlabel('X')
         plt.ylabel('Y')
         plt.show()
+
+    def plot4dLimitcycle(self, x, y, z, w):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        img = ax.scatter(x, y, z, c=w, cmap = plt.hot())
+        fig.colorbar(img)
+        ax.set_xlabel('$X$', fontsize=15)
+        ax.set_ylabel('$Y$', fontsize=15)    
+        ax.set_zlabel('$Z$', fontsize=15)
+        plt.show()
+
+
 
 
 # for testing:

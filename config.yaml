@@ -1,29 +1,30 @@
 # Set in this file the parameters for the simulation
 
 # Model to use
-useCoupled:   False 
-useDecoupled: True
+useCoupled:   True 
+useDecoupled: False
 
 # Control
-useControl: False
+useControl: True
 # Select the control to use
-usePositiveControl: False
+usePositiveControl: True
 
 # Timestep size
 dt: 0.001
 
 # Number of iterations
-it: 50000
+it: 15000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
-plotEvolution:    True
-plotStateSpace:   True
+plotEvolution:    False
+plotStateSpace:   False
 plotVectorField:  False
 plotEigenvalues:  False
-plotStabilityXY:  True    # Generate plot with stability as a function of X, Y
+plotStabilityXY:  False    # Generate plot with stability as a function of X, Y
 resetPlotBuffer:  False   # Set to False if running comparison among different IC
-plotSize: 200000     # number of timesteps to plot together
+plot4dLimitCycle: True
+plotSize: 300000    # number of timesteps to plot together
 
 # Print config (in terminal)
 printEquilibria:  False
@@ -59,7 +60,7 @@ b4:   -1
 # a23=-X, a32=X/2
 # a24=-Y, a42=Y/2
 X:    0.4
-Y:    0.2
+Y:    0.24
 
 # All other parameters which we don't study
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
