@@ -44,6 +44,29 @@ elif config.params['useCoupled']:
                     plotBuffer[it] += plotBufferIteration[it]
     modelUnited.plotter.plotstatespace4(plotBuffer[0], plotBuffer[1],\
          plotBuffer[2], plotBuffer[3])
+    modelUnited.plotter.plot4dLimitcycle(plotBuffer[0], plotBuffer[1],\
+         plotBuffer[2], plotBuffer[3])
+
+# elif config.params['useDecoupled']:
+#     plotBuffer = [[], [], [], []]
+#     for i in range(1, config.params['n_IC'] + 1):
+#         model = Dynamics()
+#         model.config['x0'] = config.params['x' + str(i)]
+#         model.config['y0'] = config.params['y' + str(i)]
+#         model.config['z0'] = config.params['z' + str(i)]
+#         model.config['w0'] = config.params['w' + str(i)]
+#         model.setParametersAgain()
+#         for i in range(nIterations):
+#             if i != nIterations-1:
+#                 model.update()
+#             else:
+#                 plotBufferIteration, _ = model.update()
+#                 for it in range(len(plotBufferIteration)):
+#                     plotBuffer[it] += plotBufferIteration[it]
+#     model.plotter.plotstatespace(plotBuffer[0], plotBuffer[1], 1)
+#     model.plotter.plotstatespace(plotBuffer[2], plotBuffer[3], 2)
+
+
 
 else:
     print('Cannot simulate decoupled systems with different IC')
