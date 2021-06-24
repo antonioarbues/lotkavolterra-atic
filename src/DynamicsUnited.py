@@ -1,3 +1,4 @@
+from numpy.lib.function_base import select
 from ConfigLoader import ConfigLoader
 from Plotter import Plotter
 from FindEquilibria import FindEquilibria
@@ -70,7 +71,8 @@ class DynamicsUnited:
             # self.z0, self.w0 = self.updateLVEuler(self.z0, self.w0, self.alpha2, self.beta2, self.gamma2, self.delta2)
             # return self.x0, self.y0, self.z0, self.w0
             print('Euler forward integration is not available yet.')
-        self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0, self.dx, self.dy, self.dz, self.dw)
+        plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0, self.dx, self.dy, self.dz, self.dw)
+        return plotBuffer, derivativePlotBuffer
 
     def setInitialConditions(self):
         return self.config['x0'], self.config['y0'], self.config['z0'], self.config['w0']
@@ -81,7 +83,19 @@ class DynamicsUnited:
             [self.config['a31'], self.config['a32'], self.config['a33'], self.config['a34']], \
             [self.config['a41'], self.config['a42'], self.config['a43'], self.config['a44']]]
         b = [self.config['b1'], self.config['b2'], self.config['b3'], self.config['b4']]
+
+        if 'X' in self.config and 'Y' in self.config:
+            X = self.config['X']
+            Y = self.config['Y']
+            a[1][2] = -X
+            a[2][1] = X/2
+            a[1][3] = -Y
+            a[3][1] = Y/2
         return a, b
+    
+    def setParametersAgain(self):
+        self.a, self.b = self.setParameters()
+        self.x0, self.y0, self.z0, self.w0 = self.setInitialConditions()
     
     def setPositiveControlParameters(self):
         k = [self.config['k1'], self.config['k2'], self.config['k3'], self.config['k4']]
@@ -92,6 +106,35 @@ class DynamicsUnited:
         equilibria = FindEquilibria()
         e = equilibria.findEquilibria(printEq=False)
         return e
+    
+    def plotStabilityXY(self):
+        X_st = []
+        X_unst = []
+        Y_st = []
+        Y_unst = []
+        range_stab = self.config['stability_discretization']
+        for i in range(0, range_stab):
+            for j in range (0, range_stab):
+                equilibria = FindEquilibria()
+                equilibria.config['X'] = i / range_stab
+                equilibria.config['Y'] = j / range_stab
+                equilibria.setParametersAgain()
+                eigs = equilibria.getEigens()
+                stable = True
+                for el in eigs:
+                    if el.real > 0:
+                        stable = False
+                if stable:
+                    X_st.append(i/range_stab)
+                    Y_st.append(j/range_stab)
+                else:
+                    X_unst.append(i/range_stab)
+                    Y_unst.append(j/range_stab)
+
+        self.plotter.plotStability(X_st, Y_st, X_unst, Y_unst)
+
+        equilibria = FindEquilibria()   # reset config X and Y
+    
 
 # for testing:
 if __name__ == '__main__':
