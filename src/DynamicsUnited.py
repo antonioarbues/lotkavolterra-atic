@@ -32,7 +32,7 @@ class DynamicsUnited:
                 x = np.array([x0, y0, z0, w0])
                 sigma = self.sigma
                 u = sigma * (-np.matmul(np.transpose(k), (x - e)))
-                #print('control input u=' + str(u))
+                print('control input u=' + str(u))
                 dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u)
                 dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u)
                 dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0 + k[2]*u)
