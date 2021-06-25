@@ -67,14 +67,16 @@ class Dynamics:
     def setInitialConditions(self):
         return self.config['x0'], self.config['y0'], self.config['z0'], self.config['w0']
 
-    # def setParametersAgain(self):
-    #     self.setParameters()
-    #     self.x0, self.y0, self.z0, self.w0 = self.setInitialConditions()
+    def setParametersAgain(self):
+        self.setParameters()
+        self.x0, self.y0, self.z0, self.w0 = self.setInitialConditions()
    
 
     def setParameters(self):
         return self.config['alpha1'], self.config['beta1'], self.config['gamma1'], self.config['delta1'], \
             self.config['alpha2'], self.config['beta2'], self.config['gamma2'], self.config['delta2']
+
+
 
 # for testing:
 if __name__ == '__main__':

@@ -15,10 +15,12 @@ class DynamicsUnited:
         self.x0, self.y0, self.z0, self.w0 = self.setInitialConditions()
         self.dx, self.dy, self.dz, self.dw = 0, 0, 0, 0
         self.a, self.b = self.setParameters()
-        self.kp, self.sigma = self.setPositiveControlParameters()
+        self.ko = self.setOptimalControlParameters()
+        #self.kp, self.sigma = self.setPositiveControlParameters()
         self.e = self.findEquilibria()
         self.isFirstIteration = True
         self.plotter = Plotter()
+        #self.F0, self.F1, self.F2, self.F3 = self.computeOptimalControl(self.x0, self.y0, self.z0,self.w0,self.a, self.b)
 
     def f(self, x0, y0, z0, w0, a, b):
         '''
@@ -33,11 +35,22 @@ class DynamicsUnited:
                 x = np.array([x0, y0, z0, w0])
                 sigma = self.sigma
                 u = sigma * (-np.matmul(np.transpose(k), (x - e)))
-                print('control input u=' + str(u))
+                #print('control input u=' + str(u))
                 dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u)
                 dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u)
                 dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0 + k[2]*u)
                 dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0 + k[3]*u)
+            if self.config['useOptimalControl']:
+                F0, F1, F2, F3 = self.computeOptimalControl(x0, y0, z0, w0, a, b)
+                # print('control input F0 =' + str(F0))
+                # print('control input F1 =' + str(F1))
+                # print('control input F2 =' + str(F2))
+                # print('control input F3 =' + str(F3))
+
+                dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0) + F0
+                dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0) + F1
+                dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0) + F2
+                dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0) + F3
         else:
             dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0)
             dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0)
@@ -101,6 +114,60 @@ class DynamicsUnited:
         k = [self.config['k1'], self.config['k2'], self.config['k3'], self.config['k4']]
         sigma = self.config['sigma']
         return k, sigma
+
+    def setOptimalControlParameters(self):
+        k =[self.config['k1o'], self.config['k2o'], self.config['k3o'], self.config['k4o']]
+        return k
+    
+    def computeOptimalControl(self, x0, y0, z0, w0, a, b):
+
+
+        ko = np.array(self.ko)
+        e = np.array(self.e)
+        x = np.array([x0, y0, z0, w0])
+        dt = self.dt
+
+        #Computing the control functions 
+
+        eps0 = -(x[0] - e[0])
+        eps1 = -(x[1] - e[1])
+        eps2 = -(x[2] - e[2])
+        eps3 = -(x[3] - e[3])
+
+        sum0 = 0
+        sum1 = 0
+        sum2 = 0
+        sum3 = 0
+
+        eps= np.array([eps0, eps1, eps2, eps3])
+
+        # for i in range(4):
+        #     sum0 = sum0 + a[0][i] * (e[0] * eps[i] * np.exp(-kp[i] * dt) + e[i]*eps[0]*np.exp(-kp[0]*dt) + eps[0] * eps[i] *np.exp(-(kp[0]+kp[i])*dt))
+        #     sum1 = sum1 + a[1][i] * (e[1] * eps[i] * np.exp(-kp[i] * dt) + e[i]*eps[1]*np.exp(-kp[1]*dt) + eps[1] * eps[i] *np.exp(-(kp[1]+kp[i])*dt))
+        #     sum2 =  sum2 + a[2][i] * (e[2] * eps[i] * np.exp(-kp[i] * dt) + e[i]*eps[2]*np.exp(-kp[2]*dt) + eps[2] * eps[i] *np.exp(-(kp[2]+kp[i])*dt))
+        #     sum3 = sum3 + a[3][i] * (e[3] * eps[i] * np.exp(-kp[i] * dt) + e[i]*eps[3]*np.exp(-kp[3]*dt) + eps[3] * eps[i] *np.exp(-(kp[3]+kp[i])*dt))
+
+        # V0 = (-(kp[0] + b[0]) * eps[0] * np.exp(-kp[0]*dt)) - sum0
+        # V1 = (-(kp[1] + b[1]) * eps[1] * np.exp(-kp[1]*dt)) - sum1
+        # V2 = (-(kp[2] + b[2]) * eps[2] * np.exp(-kp[2]*dt)) - sum2
+        # V3 = (-(kp[3] + b[3]) * eps[3] * np.exp(-kp[3]*dt)) - sum3
+
+        #Option without synchro
+
+        for i in range(4):
+            sum0 = sum0 + a[0][i] * (e[0] * eps[i] + e[i]*eps[0] + eps[0]*eps[i])
+            sum1 = sum1 + a[1][i] * (e[1] * eps[i] + e[i]*eps[1] + eps[1]*eps[i])
+            sum2 = sum2 + a[2][i] * (e[2] * eps[i] + e[i]*eps[2] + eps[2]*eps[i])
+            sum3 = sum3 + a[3][i] * (e[3] * eps[i] + e[i]*eps[3] + eps[3]*eps[i])
+        
+
+        V0 = (-(ko[0] + b[0]) * eps[0])  - sum0
+        V1 = (-(ko[1] + b[1]) * eps[1])  - sum1
+        V2 = (-(ko[2] + b[2]) * eps[2])  - sum2
+        V3 = (-(ko[3] + b[3]) * eps[3])  -  sum3
+
+        return V0, V1, V2, V3
+
 
     def findEquilibria(self):
         equilibria = FindEquilibria()

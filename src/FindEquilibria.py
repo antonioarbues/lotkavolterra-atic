@@ -64,4 +64,6 @@ class FindEquilibria:
         eigenvalues, _ = LA.eig(dyn_lin)
         if self.config['plotEigenvalues']:
             self.plotter.plotEigen(eigenvalues)
+            for eig in eigenvalues:
+                    print(str(eig) + '\n')
         return eigenvalues

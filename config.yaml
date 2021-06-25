@@ -7,18 +7,19 @@ useDecoupled: False
 # Control
 useControl: False
 # Select the control to use
-usePositiveControl: True
+usePositiveControl: False 
+useOptimalControl: True
 
 # Timestep size
 dt: 0.001
 
 # Number of iterations
-it: 15000
+it: 20000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
-plotEvolution:    False
-plotStateSpace:   False
+plotEvolution:    True
+plotStateSpace:   True
 plotVectorField:  False
 plotEigenvalues:  False
 plotStabilityXY:  False    # Generate plot with stability as a function of X, Y
@@ -27,7 +28,7 @@ plot4dLimitCycle: True
 plotSize: 30000   # number of timesteps to plot together
 
 # Print config (in terminal)
-printEquilibria:  False
+printEquilibria:  True
 
 # Initial conditions
 # System 1
@@ -40,11 +41,19 @@ w0: 10.0   # predator 2: Eagle
 # Control Parameters
 
 # Positive Control: dx/dt = diag(x)*(A*(x-e)+k*u)
-k1: 1.0
-k2: 1.0
-k3: 1.0
-k4: 1.0
+# k1: 1.0
+# k2: 1.0
+# k3: 1.0
+# k4: 1.0
 sigma:  1.0
+
+
+#Optimal Control 
+
+k1o: 0.2
+k2o: 0.6
+k3o: 0.7
+k4o: 0.5
 
 # Parameters for coupled system
 # The reference Lotka-Volterra equations are:
@@ -59,8 +68,8 @@ b4:   -1
 # If X and Y are defined, they overwrite the following values
 # a23=-X, a32=X/2
 # a24=-Y, a42=Y/2
-X:    0.28
-Y:    0.24
+X:    0.4
+Y:    0.2
 
 # All other parameters which we don't study
 a11:  0.0 #Effect on rabbit for rabbit/rabbit
@@ -100,7 +109,7 @@ useEulerForward:  False
 useRK4:           True
 
 # Comparison among different Initial Conditions
-compareIC:  True
+compareIC:  False
 n_IC: 3 # number of IC to try out
 
 # System 1
