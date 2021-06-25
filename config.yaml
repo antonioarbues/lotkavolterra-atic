@@ -126,3 +126,11 @@ w3: 10.0   # predator 2: Eagle
 
 # Stability plot for different X and Y
 stability_discretization: 15
+
+
+# ESTIMATOR (EKF)
+noisyDynamics:  True  # has to be true if using an estimator.
+# note that the dynamics are actually noisy in the estimator class, not in the dynamics class
+
+Q:  0.4 # Standard deviation of the states
+R:  0.3 # Standard deviation of the measurements
