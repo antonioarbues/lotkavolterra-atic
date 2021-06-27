@@ -52,8 +52,8 @@ class Estimator:
         # Updated state estimate (called already x00 instead of x11 for next timestep)
         self.x00 = self.x10 + np.matmul(self.K, self.y1)
 
-        print('ESTIMATED STATES\n')
-        print(str(self.x00.tolist()) + '\n')
+        # print('ESTIMATED STATES\n')
+        # print(str(self.x00.tolist()) + '\n')
 
         # Updated covariance estimate
         self.P00 = np.matmul(np.eye(4) - np.matmul(self.K, H), self.P10)
