@@ -13,7 +13,7 @@ usePositiveControl: True
 dt: 0.001
 
 # Number of iterations
-it: 15000
+it: 500
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
@@ -131,11 +131,11 @@ stability_discretization: 15
 
 # ESTIMATOR (EKF)
 
-Q11:  0.4 # Standard deviation of the states
-Q22:  0.4
-Q33:  0.4
-Q44:  0.4
-R11:  0.3 # Standard deviation of the measurements
-R22:  0.3
-R33:  0.3
-R44:  0.3
+Q11:  0.05 # Standard deviation of the states
+Q22:  0.05
+Q33:  0.05
+Q44:  0.05
+R11:  0.05 # Standard deviation of the measurements
+R22:  0.05
+R33:  0.05
+R44:  0.05

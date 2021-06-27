@@ -39,8 +39,11 @@ class Simulator:
             processnoise=False, measurementnoise=False, usecontrol=True)
         # Estimation and Control feedback
         u = self.modelP.sigma * (-np.matmul(np.transpose(self.modelP.kp), (self.estimator.x00 - self.modelP.e)))
-        self.modelP.x0, self.modelP.y0, self.modelP.z0, self.modelP.w0 = \
-            self.estimator.update(self.modelP.u)
+        x00 = self.estimator.update(u)
+        self.modelP.x0 = x00[0]
+        self.modelP.y0 = x00[1]
+        self.modelP.z0 = x00[2]
+        self.modelP.w0 = x00[3]
         if self.config['showControlInputs'] and self.config['useControl']:
             plotBuffer, derivativePlotBuffer = self.plotterP.updatePlotterBuffer(self.modelP.x0, self.modelP.y0, self.modelP.z0, self.modelP.w0, self.modelP.dx, self.modelP.dy, \
                  self.modelP.dz, self.modelP.dw, self.modelP.u)
@@ -52,5 +55,5 @@ if __name__ == '__main__':
     sim = Simulator()
     nIterations = sim.config['it']
     for i in range(nIterations):
-        # sim.updateGT()
+        sim.updateGT()
         sim.updatePipeline()
