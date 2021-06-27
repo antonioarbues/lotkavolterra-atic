@@ -15,14 +15,11 @@ class Estimator:
     def __init__(self):
         config = ConfigLoader()
         self.config = config.params
-        self.Q = self.config['Q']
-        self.R = self.config['R']
+        self.Q, self.R = self.getCovariances()
         x0, y0, z0, w0 = self.setInitialConditions()
         self.x00 = np.array([x0, y0, z0, w0])
-        # TODO: set P00 IC
+        self.P00 = np.zeros((4, 4))
         self.kp, self.sigma = self.setPositiveControlParameters()
-        self.F = self.getJacobianOfF()
-        self.H = self.getJacobianOfH()
         #self.e = self.findEquilibria()
 
     def predict(self):
@@ -30,10 +27,11 @@ class Estimator:
         y0 = self.x00[1]
         z0 = self.x00[2]
         w0 = self.x00[3]
+        F = self.getJacobianOfF()
         # Predicted state estimate
         self.x10 = np.array([self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False)])
         # Predicted covariance estimate
-        self.P10 = np.matmul(np.matmul(self.F, self.P00), np.transpose(self.F)) + self.Q  # TODO: Initialise P00 and generate jacobians
+        self.P10 = np.matmul(np.matmul(F, self.P00), np.transpose(F)) + self.Q  # TODO: Generate jacobians
         return self.x10, self.P10
 
     def update(self):
@@ -42,17 +40,18 @@ class Estimator:
         y0 = self.x00[1]
         z0 = self.x00[2]
         w0 = self.x00[3]
+        H = self.getJacobianOfH()
         # Innovation or measurement residual
         y1x, y1y, y1z, y1w = self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False) + self.getMeasurementNoise()
         self.y1 = np.array([y1x, y1y, y1z, y1w])
         # Innovation (or residual) covariance
-        self.S1 = np.matmul(np.matmul(self.H, self.P10), np.transpose(self.H)) + self.R
+        self.S1 = np.matmul(np.matmul(H, self.P10), np.transpose(H)) + self.R
         # Near-optimal Kalman gain
-        self.K = np.matmul(np.matmul(self.P10, np.transpose(self.H), np.linalg.inv(self.S1)))
+        self.K = np.matmul(np.matmul(self.P10, np.transpose(H), np.linalg.inv(self.S1)))
         # Updated state estimate (called already x00 instead of x11 for next timestep)
         self.x00 = self.x10 + np.matmul(self.K, self.y1)
         # Updated covariance estimate
-        self.P00 = np.matmul(np.eye(4) - np.matmul(self.K, self.H), self.P10)
+        self.P00 = np.matmul(np.eye(4) - np.matmul(self.K, H), self.P10)
 
     def getJacobianOfF(self):
         pass
@@ -64,13 +63,19 @@ class Estimator:
         '''
         Process noise is the noise applied to the states
         '''
-        return np.random.normal(0, self.Q, 4)
+        noise = []
+        for i in range(4):
+            noise.append(np.random.normal(0, self.Q[i][i], 1)[0])
+        return np.array(noise)
 
     def getMeasurementNoise(self):
         '''
         Measurement noise is the noise applied to the measurements
         '''
-        return np.random.normal(0, self.R, 4)
+        noise = []
+        for i in range(4):
+            noise.append(np.random.normal(0, self.R[i][i], 1)[0])
+        return np.array(noise)
 
 
 # TODO: Make a class for the dynamics, one for the estimator, one for the controller and one for the simulator
@@ -154,9 +159,21 @@ class Estimator:
         e = equilibria.findEquilibria(printEq=False)
         return e
 
+    def getCovariances(self):
+        Q = np.array([[self.config['Q11'], 0, 0, 0],\
+            [0, self.config['Q22'], 0, 0], \
+            [0, 0, self.config['Q33'], 0], \
+            [0, 0, 0, self.config['Q44']]])
+        R = np.array([[self.config['R11'], 0, 0, 0],\
+            [0, self.config['R22'], 0, 0], \
+            [0, 0, self.config['R33'], 0], \
+            [0, 0, 0, self.config['R44']]])
+        return Q, R
+
 
 # for testing
 if __name__ == '__main__':
     est = Estimator()
     print(est.getMeasurementNoise())
     print(est.getProcessNoise())
+    print(est.P00)

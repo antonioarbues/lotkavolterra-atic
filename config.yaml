@@ -132,5 +132,11 @@ stability_discretization: 15
 noisyDynamics:  True  # has to be true if using an estimator.
 # note that the dynamics are actually noisy in the estimator class, not in the dynamics class
 
-Q:  0.4 # Standard deviation of the states
-R:  0.3 # Standard deviation of the measurements
+Q11:  0.4 # Standard deviation of the states
+Q22:  0.4
+Q33:  0.4
+Q44:  0.4
+R11:  0.3 # Standard deviation of the measurements
+R22:  0.3
+R33:  0.3
+R44:  0.3
