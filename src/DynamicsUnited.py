@@ -32,7 +32,8 @@ class DynamicsUnited:
                 e = np.array(self.e)
                 x = np.array([x0, y0, z0, w0])
                 sigma = self.sigma
-                u = sigma * (-np.matmul(np.transpose(k), (x - e)))
+                self.u = sigma * (-np.matmul(np.transpose(k), (x - e)))
+                u = self.u
                 print('control input u=' + str(u))
                 dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u)
                 dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u)
@@ -71,7 +72,10 @@ class DynamicsUnited:
             # self.z0, self.w0 = self.updateLVEuler(self.z0, self.w0, self.alpha2, self.beta2, self.gamma2, self.delta2)
             # return self.x0, self.y0, self.z0, self.w0
             print('Euler forward integration is not available yet.')
-        plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0, self.dx, self.dy, self.dz, self.dw)
+        if self.config['showControlInputs'] and self.config['useControl']:
+            plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0, self.dx, self.dy, self.dz, self.dw, self.u)
+        else:
+            plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.x0, self.y0, self.z0, self.w0, self.dx, self.dy, self.dz, self.dw)
         return plotBuffer, derivativePlotBuffer
 
     def setInitialConditions(self):
