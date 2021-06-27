@@ -1,5 +1,9 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('.')))
+sys.path.append(os.path.abspath(os.path.join('.', 'src')))
 from ConfigLoader import ConfigLoader
 from FindEquilibria import FindEquilibria
+from Model import Model
 import numpy as np
 
 class Estimator:
@@ -17,25 +21,28 @@ class Estimator:
         self.config = config.params
         self.Q, self.R = self.getCovariances()
         x0, y0, z0, w0 = self.setInitialConditions()
+        self.a, self.b = self.setParameters()
+        self.dt = self.config['dt']
         self.x00 = np.array([x0, y0, z0, w0])
         self.P00 = np.zeros((4, 4))
         self.kp, self.sigma = self.setPositiveControlParameters()
-        #self.e = self.findEquilibria()
+        self.equilibria = FindEquilibria()
+        self.e = self.findEquilibria()
 
-    def predict(self):
+    def predict(self, u):
         x0 = self.x00[0]
         y0 = self.x00[1]
         z0 = self.x00[2]
         w0 = self.x00[3]
-        F = self.getJacobianOfF()
+        F = self.getJacobianOfF(self.x00, u)
         # Predicted state estimate
-        self.x10 = np.array([self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False)])
+        self.x10 = np.array(self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False))
         # Predicted covariance estimate
         self.P10 = np.matmul(np.matmul(F, self.P00), np.transpose(F)) + self.Q  # TODO: Generate jacobians
         return self.x10, self.P10
 
-    def update(self):
-        self.predict()
+    def update(self, u):
+        self.predict(u)
         x0 = self.x00[0]
         y0 = self.x00[1]
         z0 = self.x00[2]
@@ -47,17 +54,23 @@ class Estimator:
         # Innovation (or residual) covariance
         self.S1 = np.matmul(np.matmul(H, self.P10), np.transpose(H)) + self.R
         # Near-optimal Kalman gain
-        self.K = np.matmul(np.matmul(self.P10, np.transpose(H), np.linalg.inv(self.S1)))
+        self.K = np.matmul(np.matmul(self.P10, np.transpose(H)), np.linalg.inv(self.S1))
         # Updated state estimate (called already x00 instead of x11 for next timestep)
         self.x00 = self.x10 + np.matmul(self.K, self.y1)
+
+        print('ESTIMATED STATES\n')
+        print(str(self.x00.tolist()) + '\n')
+
         # Updated covariance estimate
         self.P00 = np.matmul(np.eye(4) - np.matmul(self.K, H), self.P10)
+        return self.x00
 
-    def getJacobianOfF(self):
-        pass
+    def getJacobianOfF(self, x00, u):
+        jacobian = self.equilibria.linearise(x00, True, u)
+        return jacobian
 
     def getJacobianOfH(self):
-        pass
+        return np.eye(4)
 
     def getProcessNoise(self):
         '''
@@ -93,7 +106,7 @@ class Estimator:
                 x = np.array([x0, y0, z0, w0])
                 sigma = self.sigma
                 u = sigma * (-np.matmul(np.transpose(k), (x - e)))
-                print('control input u=' + str(u))
+                #print('control input u=' + str(u))
                 dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u)
                 dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u)
                 dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0 + k[2]*u)
@@ -104,14 +117,7 @@ class Estimator:
             dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0)
             dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0)
 
-        if self.config['noisyDynamics'] and processnoise:
-            noise = self.getProcessNoise()
-            return dx0 + noise[0], dy0 + noise[1], dz0 + noise[2], dw0 + noise[3]
-        elif self.config['noisyDynamics'] and measurementnoise:
-            noise = self.getMeasurementNoise()
-            return dx0 + noise[0], dy0 + noise[1], dz0 + noise[2], dw0 + noise[3]
-        else:
-            return dx0, dy0, dz0, dw0
+        return dx0, dy0, dz0, dw0
 
     def updateRK4(self, x0, y0, z0, w0, a, b, processnoise:bool, measurementnoise:bool):
         dt = self.dt
@@ -123,7 +129,18 @@ class Estimator:
         y1 = y0 + (1/6) * dt * (k1y + 2 * k2y + 2 * k3y + k4y)
         z1 = z0 + (1/6) * dt * (k1z + 2 * k2z + 2 * k3z + k4z)
         w1 = w0 + (1/6) * dt * (k1w + 2 * k2w + 2 * k3w + k4w)
-        return x1, y1, z1, w1
+
+        print('GROUND TRUTH\n')
+        print(str(x1) + ' ' + str(y1) + ' ' + str(z1) + ' ' + str(w1) + '\n')
+
+        if self.config['noisyDynamics'] and processnoise:
+            noise = self.getProcessNoise()
+            return x1 + noise[0], y1 + noise[1], z1 + noise[2], w1 + noise[3]
+        elif self.config['noisyDynamics'] and measurementnoise:
+            noise = self.getMeasurementNoise()
+            return x1 + noise[0], y1 + noise[1], z1 + noise[2], w1 + noise[3]
+        else:
+            return x1, y1, z1, w1
 
     def setParameters(self):
         a = [[self.config['a11'], self.config['a12'], self.config['a13'], self.config['a14']], \
@@ -155,8 +172,7 @@ class Estimator:
         return k, sigma
 
     def findEquilibria(self):
-        equilibria = FindEquilibria()
-        e = equilibria.findEquilibria(printEq=False)
+        e = self.equilibria.findEquilibria(printEq=False)
         return e
 
     def getCovariances(self):
@@ -174,6 +190,10 @@ class Estimator:
 # for testing
 if __name__ == '__main__':
     est = Estimator()
-    print(est.getMeasurementNoise())
-    print(est.getProcessNoise())
-    print(est.P00)
+    sigma = est.sigma
+    k = est.kp
+    x = est.x00
+    e = est.findEquilibria()
+    u = sigma * (-np.matmul(np.transpose(k), (x - e)))
+    for i in range(1):
+        est.update(u)
