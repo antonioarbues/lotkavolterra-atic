@@ -38,7 +38,7 @@ class Estimator:
         # Predicted state estimate
         self.x10 = np.array(self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False))
         # Predicted covariance estimate
-        self.P10 = np.matmul(np.matmul(F, self.P00), np.transpose(F)) + self.Q  # TODO: Generate jacobians
+        self.P10 = np.matmul(np.matmul(F, self.P00), np.transpose(F)) + self.Q
         return self.x10, self.P10
 
     def update(self, u):
@@ -49,7 +49,7 @@ class Estimator:
         w0 = self.x00[3]
         H = self.getJacobianOfH()
         # Innovation or measurement residual
-        y1x, y1y, y1z, y1w = self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False) + self.getMeasurementNoise()
+        y1x, y1y, y1z, y1w = self.updateRK4(x0, y0, z0, w0, self.a, self.b, processnoise=True, measurementnoise=False) + self.getMeasurementNoise() - self.x10
         self.y1 = np.array([y1x, y1y, y1z, y1w])
         # Innovation (or residual) covariance
         self.S1 = np.matmul(np.matmul(H, self.P10), np.transpose(H)) + self.R
@@ -195,5 +195,5 @@ if __name__ == '__main__':
     x = est.x00
     e = est.findEquilibria()
     u = sigma * (-np.matmul(np.transpose(k), (x - e)))
-    for i in range(1):
+    for i in range(100):
         est.update(u)
