@@ -5,7 +5,7 @@ useCoupled:   True
 useDecoupled: False
 
 # Control
-useControl: False
+useControl: True
 # Select the control to use
 usePositiveControl: True
 
@@ -17,13 +17,14 @@ it: 15000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
-plotEvolution:    False
+plotEvolution:    True
 plotStateSpace:   False
 plotVectorField:  False
 plotEigenvalues:  False
 plotStabilityXY:  False    # Generate plot with stability as a function of X, Y
-resetPlotBuffer:  False   # Set to False if running comparison among different IC
-plot4dLimitCycle: True
+resetPlotBuffer:  True     # Set to False if running comparison among different IC
+showControlInputs:  True
+plot4dLimitCycle: False
 plotSize: 30000   # number of timesteps to plot together
 
 # Print config (in terminal)
@@ -100,7 +101,7 @@ useEulerForward:  False
 useRK4:           True
 
 # Comparison among different Initial Conditions
-compareIC:  True
+compareIC:  False
 n_IC: 3 # number of IC to try out
 
 # System 1

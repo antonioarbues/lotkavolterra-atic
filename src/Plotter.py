@@ -12,8 +12,9 @@ class Plotter:
         self.plotBuffer = [[], [], [], []]
         self.derivativePlotBuffer = [[], [], [], []]
         self.plot = self.config['plot']
+        self.controlInputs = []
 
-    def updatePlotterBuffer(self, x, y, z, w, dx, dy, dz, dw):
+    def updatePlotterBuffer(self, x, y, z, w, dx, dy, dz, dw, *args):
         self.plotBuffer[0].append(x)
         self.plotBuffer[1].append(y)
         self.plotBuffer[2].append(z)
@@ -23,6 +24,9 @@ class Plotter:
         self.derivativePlotBuffer[1].append(dy)
         self.derivativePlotBuffer[2].append(dz)
         self.derivativePlotBuffer[3].append(dw)
+
+        for el in args:
+            self.controlInputs.append(el)
 
         if self.plot and len(self.plotBuffer[0]) == min(self.config['plotSize'], self.config['it']):
             if self.config['useDecoupled']:
@@ -38,7 +42,10 @@ class Plotter:
                 self.plotBuffer = [[], [], [], []]    # reset plotter buffer
             elif self.config['useCoupled']:
                 if self.config['plotEvolution']:
-                    self.plot2d4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3])
+                    if self.config['showControlInputs'] and self.config['useControl']:
+                        self.plot2d4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3], True, self.controlInputs)
+                    else:
+                        self.plot2d4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2],self.plotBuffer[3])
                 if self.config['plotStateSpace']:
                     self.plotstatespace4(self.plotBuffer[0], self.plotBuffer[1], self.plotBuffer[2], self.plotBuffer[3])
                 if self.config['plotVectorField']:
@@ -103,15 +110,20 @@ class Plotter:
         plt.show()
 
 
-    def plot2d4(self, v1, v2, v3, v4):
+    def plot2d4(self, v1, v2, v3, v4, plotinput:bool=False, *args):
         '''
         plots four vectors
+        pass a bool and more vectors if you want them to get plotted together with the trajectories
+        ex: pass 4 vectors, True, inputs
         '''
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9,7))
         ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1, label = 'Prey 1')
         ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'Predator 1')
         ax.plot((self.dt * np.array(list(range(len(v3))))).tolist(), v3, label = 'Prey 2')
         ax.plot((self.dt * np.array(list(range(len(v4))))).tolist(), v4, label = 'Predator 2')
+        if plotinput:
+            for el in args:
+                ax.plot((self.dt * np.array(list(range(len(el))))).tolist(), el, '--', label = 'Control Input')
         plt.title('Coupled system')
         plt.xlabel('Time')
         plt.ylabel('Population size')
