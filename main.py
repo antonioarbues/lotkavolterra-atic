@@ -2,6 +2,7 @@ import sys
 sys.path.insert(1, "./src/")
 from src.ConfigLoader import ConfigLoader
 from src.Dynamics import Dynamics
+from src.Dynamics import Dynamics
 from src.DynamicsUnited import DynamicsUnited
 from src.FindEquilibria import FindEquilibria
 from src.Plotter import Plotter

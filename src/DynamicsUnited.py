@@ -20,7 +20,7 @@ class DynamicsUnited:
         self.e = self.findEquilibria()
         self.isFirstIteration = True
         self.plotter = Plotter()
-        #self.F0, self.F1, self.F2, self.F3 = self.computeOptimalControl(self.x0, self.y0, self.z0,self.w0,self.a, self.b)
+        
 
     def f(self, x0, y0, z0, w0, a, b):
         '''
@@ -127,12 +127,16 @@ class DynamicsUnited:
         x = np.array([x0, y0, z0, w0])
         dt = self.dt
 
+        for i in range(4):
+            for j in range(4):
+                a[i][j] = -a[i][j]
+
         #Computing the control functions 
 
-        eps0 = -(x[0] - e[0])
-        eps1 = -(x[1] - e[1])
-        eps2 = -(x[2] - e[2])
-        eps3 = -(x[3] - e[3])
+        eps0 = (x[0] - e[0])
+        eps1 = (x[1] - e[1])
+        eps2 = (x[2] - e[2])
+        eps3 = (x[3] - e[3])
 
         sum0 = 0
         sum1 = 0
@@ -154,6 +158,21 @@ class DynamicsUnited:
 
         #Option without synchro
 
+        #Computing the steady states 
+
+        sum_ss0 = 0
+        sum_ss1 = 0
+        sum_ss2 = 0
+        sum_ss3 = 0
+
+        for i in range(4):
+            sum_ss0 += a[0][i] * e[0]*e[i]
+            sum_ss1 += a[1][i] * e[1]*e[i]
+            sum_ss2 += a[2][i] * e[2]*e[i]
+            sum_ss3 += a[3][i] * e[3]*e[i]
+
+
+
         for i in range(4):
             sum0 = sum0 + a[0][i] * (e[0] * eps[i] + e[i]*eps[0] + eps[0]*eps[i])
             sum1 = sum1 + a[1][i] * (e[1] * eps[i] + e[i]*eps[1] + eps[1]*eps[i])
@@ -164,9 +183,28 @@ class DynamicsUnited:
         V0 = (-(ko[0] + b[0]) * eps[0])  - sum0
         V1 = (-(ko[1] + b[1]) * eps[1])  - sum1
         V2 = (-(ko[2] + b[2]) * eps[2])  - sum2
-        V3 = (-(ko[3] + b[3]) * eps[3])  -  sum3
+        V3 = (-(ko[3] + b[3]) * eps[3])  - sum3
 
-        return V0, V1, V2, V3
+        
+        F0_ss = -b[0] * e[0] - sum_ss0 
+        F1_ss = -b[1] * e[1] - sum_ss1 
+        F2_ss = -b[2] * e[2] - sum_ss2 
+        F3_ss = -b[3] * e[3] - sum_ss3
+        
+        # print('F0_ss =' + str(F0_ss))
+        # print('F1_ss =' + str(F1_ss))
+        # print('F2_ss =' + str(F2_ss))
+        # print('F3_ss =' + str(F3_ss))
+
+
+        F0 = V0 + F0_ss
+        F1 = V1 + F1_ss
+        F2 = V2 + F2_ss
+        F3 = V3 + F3_ss
+
+
+        #return V0, V1, V2, V3
+        return F0, F1, F2, F3
 
 
     def findEquilibria(self):

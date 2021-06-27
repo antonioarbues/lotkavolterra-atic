@@ -167,13 +167,14 @@ class Plotter:
     def plot4dLimitcycle(self, x, y, z, w):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        img = ax.scatter(x, y, z, c=w, cmap = plt.hot())
-        fig.colorbar(img)
-        ax.set_xlabel('$X$', fontsize=15)
-        ax.set_ylabel('$Y$', fontsize=15)    
-        ax.set_zlabel('$Z$', fontsize=15)
+        img = ax.scatter(x, y, z, c=w, cmap = plt.summer())
+        cbar = fig.colorbar(img)
+        cbar.set_label('Predator 2', fontsize = 10)
+        ax.set_xlabel('Prey 1', fontsize=10)
+        ax.set_ylabel('Predator 1', fontsize=10)    
+        ax.set_zlabel('Prey 2', fontsize=10)
+        
         plt.show()
-
 
 
 
