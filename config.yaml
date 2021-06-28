@@ -131,11 +131,17 @@ stability_discretization: 15
 
 # ESTIMATOR (EKF)
 
-Q11:  0.05 # Standard deviation of the states
-Q22:  0.05
-Q33:  0.05
-Q44:  0.05
-R11:  0.05 # Standard deviation of the measurements
-R22:  0.05
-R33:  0.05
-R44:  0.05
+Q11:  0.1 # Standard deviation of the states
+Q22:  0.1
+Q33:  0.1
+Q44:  0.1
+R11:  0.01 # Standard deviation of the measurements
+R22:  0.01
+R33:  0.01
+R44:  0.01
+
+# SIMULATOR NOISE
+QS11: 0.1
+QS22: 0.1
+QS33: 0.1
+QS44: 0.1

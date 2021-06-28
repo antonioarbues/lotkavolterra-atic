@@ -30,7 +30,7 @@ class Estimator:
         w0 = self.x00[3]
         F = self.getJacobianOfF(self.x00, u)
         # Predicted state estimate
-        self.x10 = np.array(self.model.updateRK4(x0, y0, z0, w0, self.model.a, self.model.b, processnoise=True, measurementnoise=False))
+        self.x10 = np.array(self.model.updateRK4(x0, y0, z0, w0, self.model.a, self.model.b, processnoise=True, simulatornoise=False,measurementnoise=False))
         # Predicted covariance estimate
         self.P10 = np.matmul(np.matmul(F, self.P00), np.transpose(F)) + self.model.Q
         return self.x10, self.P10
@@ -43,7 +43,7 @@ class Estimator:
         w0 = self.x00[3]
         H = self.getJacobianOfH()
         # Innovation or measurement residual
-        y1x, y1y, y1z, y1w = self.model.updateRK4(x0, y0, z0, w0, self.model.a, self.model.b, processnoise=True, measurementnoise=False) + self.model.getMeasurementNoise() - self.x10
+        y1x, y1y, y1z, y1w = self.model.updateRK4(x0, y0, z0, w0, self.model.a, self.model.b, processnoise=False, simulatornoise=True,measurementnoise=True) - self.x10
         self.y1 = np.array([y1x, y1y, y1z, y1w])
         # Innovation (or residual) covariance
         self.S1 = np.matmul(np.matmul(H, self.P10), np.transpose(H)) + self.model.R
