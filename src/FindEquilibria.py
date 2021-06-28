@@ -12,6 +12,7 @@ class FindEquilibria:
         self.config = config.params
         self.a, self.b = self.setParameters()
         self.plotter = Plotter()
+        self.k, self.sigma = self.setPositiveControlParameters()
 
     def setParameters(self):
         a = [[self.config['a11'], self.config['a12'], self.config['a13'], self.config['a14']], \
@@ -29,6 +30,11 @@ class FindEquilibria:
             a[3][1] = Y/2
         return a, b
     
+    def setPositiveControlParameters(self):
+        k = [self.config['k1'], self.config['k2'], self.config['k3'], self.config['k4']]
+        sigma = self.config['sigma']
+        return k, sigma
+
     def setParametersAgain(self):
         self.a, self.b = self.setParameters()
 
@@ -41,27 +47,38 @@ class FindEquilibria:
                     print(str(el) + '\n')
         return eq
 
-    def linearise(self, equilibrium):
+    def linearise(self, equilibrium, considerControl:bool=False, *args):
         # linearised dynamics 
         b = self.b
         a = self.a
+        k = self.k
         x0 = equilibrium[0]
         y0 = equilibrium[1]
         z0 = equilibrium[2]
         w0 = equilibrium[3]
-        dyn_lin = [[b[0] - 2*a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0, -a[0][1]*x0, -a[0][2]*x0, -a[0][3]*x0], \
-            [-a[1][0]*y0, b[1] - a[1][0]*x0 - 2*a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0, -a[1][2]*y0, -a[1][3]*y0], \
-            [-a[2][0]*z0, -a[2][1]*z0, b[2] - a[2][0]*x0 - a[2][1]*y0 - 2*a[2][2]*z0 - a[2][3]*w0, -a[2][3]*z0], \
-            [-a[3][0]*w0, -a[3][1]*w0, -a[3][2]*w0, b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - 2*a[3][3]*w0]]
-        print(equilibrium)
-        print('---')
-        print(dyn_lin)
+        for el in args:
+            u = el
+            break
+        if self.config['useControl'] and considerControl and self.config['usePositiveControl']:
+            dyn_lin = [[b[0] - 2*a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u, -a[0][1]*x0, -a[0][2]*x0, -a[0][3]*x0], \
+            [-a[1][0]*y0, b[1] - a[1][0]*x0 - 2*a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u, -a[1][2]*y0, -a[1][3]*y0], \
+            [-a[2][0]*z0, -a[2][1]*z0, b[2] - a[2][0]*x0 - a[2][1]*y0 - 2*a[2][2]*z0 - a[2][3]*w0 + k[2]*u, -a[2][3]*z0], \
+            [-a[3][0]*w0, -a[3][1]*w0, -a[3][2]*w0, b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - 2*a[3][3]*w0 + k[3]*u]]
+        else:
+            dyn_lin = [[b[0] - 2*a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0, -a[0][1]*x0, -a[0][2]*x0, -a[0][3]*x0], \
+                [-a[1][0]*y0, b[1] - a[1][0]*x0 - 2*a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0, -a[1][2]*y0, -a[1][3]*y0], \
+                [-a[2][0]*z0, -a[2][1]*z0, b[2] - a[2][0]*x0 - a[2][1]*y0 - 2*a[2][2]*z0 - a[2][3]*w0, -a[2][3]*z0], \
+                [-a[3][0]*w0, -a[3][1]*w0, -a[3][2]*w0, b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - 2*a[3][3]*w0]]
+        if self.config['printEquilibria']:
+            print(equilibrium)
+            print('---')
+            print(dyn_lin)
         return dyn_lin
     
     def getEigens(self):
         eq = self.findEquilibria()
         dyn_lin = self.linearise(eq)
         eigenvalues, _ = LA.eig(dyn_lin)
-        if self.config['plotEigenvalues']:
+        if self.config['plotEigenvalues'] and not self.config['plotStabilityXY']:
             self.plotter.plotEigen(eigenvalues)
         return eigenvalues
