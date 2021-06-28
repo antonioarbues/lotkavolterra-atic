@@ -19,7 +19,7 @@ ref_w:  5.0
 dt: 0.001
 
 # Number of iterations
-it: 3000
+it: 2000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
@@ -66,10 +66,10 @@ Q22:  0.05
 Q33:  0.05
 Q44:  0.05
 # Standard deviation of the measurements
-R11:  0.2
-R22:  0.2
-R33:  0.2
-R44:  0.2
+R11:  0.02
+R22:  0.02
+R33:  0.02
+R44:  0.02
 
 # SIMULATOR NOISE
 # Standard deviation of the simulator

@@ -10,6 +10,11 @@ if sim.config['plotStabilityXY']:
 
 # Simulation of a single system
 if not sim.config['compareIC']:
+    print('The plots will appear in the following order: \n')
+    if sim.config['simulateGT']:
+        print('Ground Truth \n')
+    if sim.config['simulatePipeline']:
+        print('Controller-Estimator Pipeline \n')
     for i in range(nIterations):
             if sim.config['simulateGT']:
                 sim.updateGT()

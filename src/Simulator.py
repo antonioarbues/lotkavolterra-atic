@@ -23,7 +23,7 @@ class Simulator:
             usecontrol=True)
         self.model.x0, self.model.y0, self.model.z0, self.model.w0 = \
              self.model.updateRK4(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.a, self.model.b, \
-                 processnoise=False, measurementnoise=False, simulatornoise=False, usecontrol=True)
+                 processnoise=False, measurementnoise=False, simulatornoise=True, usecontrol=True)
         if self.config['showControlInputs'] and self.config['useControl']:
             plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.dx, self.model.dy, \
                  self.model.dz, self.model.dw, self.model.u)
