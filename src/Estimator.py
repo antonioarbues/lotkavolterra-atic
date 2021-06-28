@@ -51,10 +51,7 @@ class Estimator:
         self.K = np.matmul(np.matmul(self.P10, np.transpose(H)), np.linalg.inv(self.S1))
         # Updated state estimate (called already x00 instead of x11 for next timestep)
         self.x00 = self.x10 + np.matmul(self.K, self.y1)
-
-        # print('ESTIMATED STATES\n')
-        # print(str(self.x00.tolist()) + '\n')
-
+        
         # Updated covariance estimate
         self.P00 = np.matmul(np.eye(4) - np.matmul(self.K, H), self.P10)
         return self.x00
@@ -65,7 +62,6 @@ class Estimator:
 
     def getJacobianOfH(self):
         return np.eye(4)
-
 
 # for testing
 if __name__ == '__main__':

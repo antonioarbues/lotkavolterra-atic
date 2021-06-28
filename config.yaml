@@ -1,30 +1,36 @@
 # Set in this file the parameters for the simulation
 
-# Model to use
-useCoupled:   True 
-useDecoupled: False
+# Simulator
+simulateGT: True  # if true, the ground truth is simulated
+simulatePipeline: True  # if true, the estimator-controller pipeline is simulated
 
 # Control
 useControl: True
 # Select the control to use
-usePositiveControl: True
+usePositiveControl: False   # equilibrium tracking
+useOptimalControl:  True    # reference tracking
+# Reference to track
+ref_x:  1.0
+ref_y:  2.0
+ref_z:  8.0
+ref_w:  5.0
 
 # Timestep size
 dt: 0.001
 
 # Number of iterations
-it: 500
+it: 3000
 
 # Plot config
 plot:             True    # if True, it plots every plotSize iterations. If false, every plot is disabled.
 plotEvolution:    True
-plotStateSpace:   False
-plotVectorField:  False
-plotEigenvalues:  False
+plotStateSpace:   True
+plotVectorField:  True
+plotEigenvalues:  True
 plotStabilityXY:  False    # Generate plot with stability as a function of X, Y
-resetPlotBuffer:  True     # Set to False if running comparison among different IC
+resetPlotBuffer:  True
 showControlInputs:  True
-plot4dLimitCycle: False
+plot4dLimitCycle: True
 plotSize: 30000   # number of timesteps to plot together
 
 # Print config (in terminal)
@@ -47,6 +53,31 @@ k3: 1.0
 k4: 1.0
 sigma:  1.0
 
+# Optimal Control
+k1o: 1.0
+k2o: 1.0
+k3o: 1.0
+k4o: 1.0
+
+# ESTIMATOR (EKF)
+# Standard deviation of the states
+Q11:  0.05
+Q22:  0.05
+Q33:  0.05
+Q44:  0.05
+# Standard deviation of the measurements
+R11:  0.2
+R22:  0.2
+R33:  0.2
+R44:  0.2
+
+# SIMULATOR NOISE
+# Standard deviation of the simulator
+QS11: 0.05
+QS22: 0.05
+QS33: 0.05
+QS44: 0.05
+
 # Parameters for coupled system
 # The reference Lotka-Volterra equations are:
 # dxi/dt = xi(bi - sum_j(aij * xj))    ,    i=1,_,n
@@ -64,41 +95,22 @@ X:    0.4
 Y:    0.2
 
 # All other parameters which we don't study
-a11:  0.0 #Effect on rabbit for rabbit/rabbit
-a12:  0.5 #Effect on rabbit for rabbit/snake
-a13:  0.0  #Effect on rabbit for rabbit/deer
-a14:  0.0  #Effect on rabbit for rabbit/eagle
-a21:  -1.0 #Effect on snake for snake/rabbit
-a22:  0.0 #Effect on snake for snake/snake
-a23:  -0.4 #Effect on snake for snake/deer
-a24:  -0.2 #Effect on snake for snake/eagle
-a31:  0 #Effect on deer for deer/rabbit
-a32:  0.2 #Effect on deer for deer/snake
-a33:  0.0 #Effect on deer for deer/deer
-a34:  0.5 #Effect on deer for deer/eagle
-a41:  0.0 #Effect on eagle for eagle/rabbit
-a42:  0.1 #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
-a43:  -1 #Effect on eagle for eagle/deer
-a44:  0 #Effect on eagle for eagle/eagle
-
-# Parameters for decoupled system
-# The reference Lotka-Volterra equations are:
-# Prey:     dx/dt = alpha*x - beta*x*y
-# Predator: dy/dt = -delta*x*y + gamma*y
-# System 1
-alpha1:  4.0
-beta1:   0.5
-gamma1:  -1.0 # negative sign for the predator
-delta1:  -1.0 # negative sign for the predator
-# System 2
-alpha2:  3.0
-beta2:   0.5
-gamma2:  -1.0
-delta2:  -1.0
-
-# Integration method
-useEulerForward:  False
-useRK4:           True
+a11:  0.0     #Effect on rabbit for rabbit/rabbit
+a12:  0.5     #Effect on rabbit for rabbit/snake
+a13:  0.0     #Effect on rabbit for rabbit/deer
+a14:  0.0     #Effect on rabbit for rabbit/eagle
+a21:  -1.0    #Effect on snake for snake/rabbit
+a22:  0.0     #Effect on snake for snake/snake
+a23:  -0.4    #Effect on snake for snake/deer
+a24:  -0.2    #Effect on snake for snake/eagle
+a31:  0.0     #Effect on deer for deer/rabbit
+a32:  0.2     #Effect on deer for deer/snake
+a33:  0.0     #Effect on deer for deer/deer
+a34:  0.5     #Effect on deer for deer/eagle
+a41:  0.0     #Effect on eagle for eagle/rabbit
+a42:  0.1     #Effect on eagle for eagle/snake (Here predator prey can interchange, might be interesting to see what happens)
+a43:  -1.0    #Effect on eagle for eagle/deer
+a44:  0.0     #Effect on eagle for eagle/eagle
 
 # Comparison among different Initial Conditions
 compareIC:  False
@@ -127,21 +139,3 @@ w3: 10.0   # predator 2: Eagle
 
 # Stability plot for different X and Y
 stability_discretization: 15
-
-
-# ESTIMATOR (EKF)
-
-Q11:  0.1 # Standard deviation of the states
-Q22:  0.1
-Q33:  0.1
-Q44:  0.1
-R11:  0.01 # Standard deviation of the measurements
-R22:  0.01
-R33:  0.01
-R44:  0.01
-
-# SIMULATOR NOISE
-QS11: 0.1
-QS22: 0.1
-QS33: 0.1
-QS44: 0.1
