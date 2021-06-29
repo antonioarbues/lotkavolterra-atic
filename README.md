@@ -38,5 +38,5 @@ This repository contains the final project for the class Advanced Topics In Cont
 
 <a name="license"></a>
 ## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/antonioterpin/visual-odometry-mono/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/antonioarbues/lotkavolterra-atic/blob/main/LICENSE) file for details.
 
