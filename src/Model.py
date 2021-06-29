@@ -138,6 +138,11 @@ class Model:
         F2 = V2 + F2_ss
         F3 = V3 + F3_ss
 
+        # print (F0)
+        # print (F1)
+        # print (F2)
+        # print (F3)
+
         return F0, F1, F2, F3
     
     def setOptimalControlParameters(self):

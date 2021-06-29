@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from ConfigLoader import ConfigLoader
+plt.rcParams.update({'font.size': 16})
+plt.rcParams['legend.loc'] = "upper right"
 
 
 class Plotter:
@@ -63,6 +65,12 @@ class Plotter:
         ax4.legend()
         ax5.legend()
         ax6.legend()
+        ax1.tick_params(axis='x', labelrotation=45)
+        ax2.tick_params(axis='x', labelrotation=45)
+        ax3.tick_params(axis='x', labelrotation=45)
+        ax4.tick_params(axis='x', labelrotation=45)
+        ax5.tick_params(axis='x', labelrotation=45)
+        ax6.tick_params(axis='x', labelrotation=45)
         plt.tight_layout()
         plt.show()
 
@@ -74,16 +82,17 @@ class Plotter:
         ex: pass 4 vectors, True, inputs
         '''
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9,7))
-        ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1, label = 'Prey 1')
-        ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'Predator 1')
-        ax.plot((self.dt * np.array(list(range(len(v3))))).tolist(), v3, label = 'Prey 2')
-        ax.plot((self.dt * np.array(list(range(len(v4))))).tolist(), v4, label = 'Predator 2')
+        ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1, label = 'rabbit',linewidth=3)
+        ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'snake',linewidth=3)
+        ax.plot((self.dt * np.array(list(range(len(v3))))).tolist(), v3, label = 'deer',linewidth=3)
+        ax.plot((self.dt * np.array(list(range(len(v4))))).tolist(), v4, label = 'eagle',linewidth=3)
         if plotinput:
             for el in args:
-                ax.plot((self.dt * np.array(list(range(len(el))))).tolist(), el, '--', label = 'Control Input')
-        plt.xlabel('Time')
-        plt.ylabel('Population size')
+                ax.plot((self.dt * np.array(list(range(len(el))))).tolist(), el, '--', label = 'control input')
+        plt.xlabel('Time', fontsize = 16)
+        plt.ylabel('Population size', fontsize = 16)
         ax.legend()
+
         plt.tight_layout()
         plt.show()
 
@@ -118,9 +127,11 @@ class Plotter:
     def plot4dLimitcycle(self, x, y, z, w):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        img = ax.scatter(x, y, z, c=w, cmap = plt.hot())
-        fig.colorbar(img)
-        ax.set_xlabel('$X$', fontsize=15)
-        ax.set_ylabel('$Y$', fontsize=15)    
-        ax.set_zlabel('$Z$', fontsize=15)
+        img = ax.scatter(x, y, z, c=w, cmap = plt.summer())
+        cbar = fig.colorbar(img)
+        ax.set_xlabel('rabbit', fontsize=18)
+        ax.set_ylabel('snake', fontsize=18)    
+        ax.set_zlabel('deer', fontsize=18, rotation=90)
+        cbar.set_label('eagle', fontsize = 18)
+        ax.tick_params(axis='x', labelrotation=30)
         plt.show()
