@@ -16,7 +16,7 @@ class DynamicsUnited:
         self.dx, self.dy, self.dz, self.dw = 0, 0, 0, 0
         self.a, self.b = self.setParameters()
         self.ko = self.setOptimalControlParameters()
-        #self.kp, self.sigma = self.setPositiveControlParameters()
+        self.kp, self.sigma = self.setPositiveControlParameters()
         self.e = self.findEquilibria()
         self.isFirstIteration = True
         self.plotter = Plotter()
@@ -33,8 +33,10 @@ class DynamicsUnited:
                 k = np.array(self.kp)
                 e = np.array(self.e)
                 x = np.array([x0, y0, z0, w0])
+                r=np.array([2, 3, 4, 1])
                 sigma = self.sigma
-                u = sigma * (-np.matmul(np.transpose(k), (x - e)))
+                #u = sigma * (-np.matmul(np.transpose(k), (x -e)))
+                u = sigma * (-np.matmul(np.transpose(k), (x -r)))
                 #print('control input u=' + str(u))
                 dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0 + k[0]*u)
                 dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0 + k[1]*u)
@@ -126,6 +128,8 @@ class DynamicsUnited:
         e = np.array(self.e)
         x = np.array([x0, y0, z0, w0])
         dt = self.dt
+
+        e=np.array([2, 3, 4, 1]) #Reference tracking (gypsy change for testing, should be done properly)
 
         for i in range(4):
             for j in range(4):

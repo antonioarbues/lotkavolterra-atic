@@ -72,7 +72,7 @@ class Plotter:
         '''
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9,7))
         ax.plot(v1, v2)
-        plt.title('State space of system number ' + str(systemN))
+        #plt.title('State space of system number ' + str(systemN))
         plt.xlabel('Time')
         plt.ylabel('Population size')
         ax.legend()
@@ -108,11 +108,11 @@ class Plotter:
         plots four vectors
         '''
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9,7))
-        ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1, label = 'Prey 1')
-        ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'Predator 1')
-        ax.plot((self.dt * np.array(list(range(len(v3))))).tolist(), v3, label = 'Prey 2')
-        ax.plot((self.dt * np.array(list(range(len(v4))))).tolist(), v4, label = 'Predator 2')
-        plt.title('Coupled system')
+        ax.plot((self.dt * np.array(list(range(len(v1))))).tolist(), v1, label = 'Rabbit')
+        ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'Snake')
+        ax.plot((self.dt * np.array(list(range(len(v3))))).tolist(), v3, label = 'Deer')
+        ax.plot((self.dt * np.array(list(range(len(v4))))).tolist(), v4, label = 'Eagle')
+        #plt.title('Coupled system')
         plt.xlabel('Time')
         plt.ylabel('Population size')
         ax.legend()
@@ -169,10 +169,10 @@ class Plotter:
         ax = fig.add_subplot(111, projection='3d')
         img = ax.scatter(x, y, z, c=w, cmap = plt.summer())
         cbar = fig.colorbar(img)
-        cbar.set_label('Predator 2', fontsize = 10)
-        ax.set_xlabel('Prey 1', fontsize=10)
-        ax.set_ylabel('Predator 1', fontsize=10)    
-        ax.set_zlabel('Prey 2', fontsize=10)
+        ax.set_xlabel('Rabbit', fontsize=14)
+        ax.set_ylabel('Snake', fontsize=14)    
+        ax.set_zlabel('Deer', fontsize=14)
+        cbar.set_label('Eagle', fontsize = 14)
         
         plt.show()
 
