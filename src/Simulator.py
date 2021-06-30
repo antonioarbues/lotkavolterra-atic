@@ -25,8 +25,12 @@ class Simulator:
              self.model.updateRK4(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.a, self.model.b, \
                  processnoise=False, measurementnoise=False, simulatornoise=True, usecontrol=True)
         if self.config['showControlInputs'] and self.config['useControl']:
-            plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.dx, self.model.dy, \
-                 self.model.dz, self.model.dw, self.model.u)
+            if self.config['usePositiveControl']:
+                plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.dx, self.model.dy, \
+                    self.model.dz, self.model.dw, self.model.u)
+            else:
+                plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.dx, self.model.dy, \
+                    self.model.dz, self.model.dw, self.model.F0, self.model.F1, self.model.F2, self.model.F3)
         else:
             plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.model.x0, self.model.y0, self.model.z0, self.model.w0, self.model.dx, self.model.dy, self.model.dz, self.model.dw)
         return plotBuffer, derivativePlotBuffer
@@ -45,8 +49,12 @@ class Simulator:
         self.modelP.z0 = x00[2]
         self.modelP.w0 = x00[3]
         if self.config['showControlInputs'] and self.config['useControl']:
-            plotBuffer, derivativePlotBuffer = self.plotterP.updatePlotterBuffer(self.modelP.x0, self.modelP.y0, self.modelP.z0, self.modelP.w0, self.modelP.dx, self.modelP.dy, \
-                 self.modelP.dz, self.modelP.dw, self.modelP.u)
+            if self.config['usePositiveControl']:
+                plotBuffer, derivativePlotBuffer = self.plotterP.updatePlotterBuffer(self.modelP.x0, self.modelP.y0, self.modelP.z0, self.modelP.w0, self.modelP.dx, self.modelP.dy, \
+                    self.modelP.dz, self.modelP.dw, self.modelP.u)
+            else:
+                plotBuffer, derivativePlotBuffer = self.plotter.updatePlotterBuffer(self.modelP.x0, self.modelP.y0, self.modelP.z0, self.modelP.w0, self.modelP.dx, self.modelP.dy, \
+                    self.modelP.dz, self.modelP.dw, self.modelP.F0, self.modelP.F1, self.modelP.F2, self.modelP.F3)
         else:
             plotBuffer, derivativePlotBuffer = self.plotterP.updatePlotterBuffer(self.modelP.x0, self.modelP.y0, self.modelP.z0, self.modelP.w0, self.modelP.dx, self.modelP.dy, self.modelP.dz, self.modelP.dw)
         return plotBuffer, derivativePlotBuffer

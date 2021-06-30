@@ -23,6 +23,7 @@ class Model:
         self.e = self.equilibria.findEquilibria(printEq=False)
         x0_vec = np.array([self.x0, self.y0, self.z0, self.w0])
         self.u = self.sigma * (-np.matmul(np.transpose(self.kp), (x0_vec - self.e)))
+        self.F0, self.F1, self.F2, self.F3 = self.computeOptimalControl(self.x0, self.y0, self.z0, self.w0, self.a, self.b, True)
 
     def f(self, x0, y0, z0, w0, a, b, usecontrol:bool=True):
         '''
@@ -44,7 +45,8 @@ class Model:
                 dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0 + k[2]*u)
                 dw0 = w0 * (b[3] - a[3][0]*x0 - a[3][1]*y0 - a[3][2]*z0 - a[3][3]*w0 + k[3]*u)
             elif self.config['useOptimalControl']:
-                F0, F1, F2, F3 = self.computeOptimalControl(x0, y0, z0, w0, a, b)
+                self.F0, self.F1, self.F2, self.F3 = self.computeOptimalControl(x0, y0, z0, w0, a, b)
+                F0, F1, F2, F3 = self.F0, self.F1, self.F2, self.F3
                 dx0 = x0 * (b[0] - a[0][0]*x0 - a[0][1]*y0 - a[0][2]*z0 - a[0][3]*w0) + F0
                 dy0 = y0 * (b[1] - a[1][0]*x0 - a[1][1]*y0 - a[1][2]*z0 - a[1][3]*w0) + F1
                 dz0 = z0 * (b[2] - a[2][0]*x0 - a[2][1]*y0 - a[2][2]*z0 - a[2][3]*w0) + F2
@@ -82,7 +84,7 @@ class Model:
                   z1 + noise_p[2] + noise_m[0] + noise_s[0], \
                        w1 + noise_p[3] + noise_m[0] + noise_s[0]
 
-    def computeOptimalControl(self, x0, y0, z0, w0, a, b):
+    def computeOptimalControl(self, x0, y0, z0, w0, a, b, initialization:bool=False):
 
         ko = np.array(self.ko)
         e = self.ref
@@ -137,6 +139,13 @@ class Model:
         F1 = V1 + F1_ss
         F2 = V2 + F2_ss
         F3 = V3 + F3_ss
+
+        if not initialization:
+            if abs(F0 - self.F0) > 5:
+                if F0 > 0:
+                    F0 = 5
+                else:
+                    F0 = -5
 
         # print (F0)
         # print (F1)

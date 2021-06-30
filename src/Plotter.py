@@ -15,6 +15,10 @@ class Plotter:
         self.derivativePlotBuffer = [[], [], [], []]
         self.plot = self.config['plot']
         self.controlInputs = []
+        self.controlInput0 = []
+        self.controlInput1 = []
+        self.controlInput2 = []
+        self.controlInput3 = []
 
     def updatePlotterBuffer(self, x, y, z, w, dx, dy, dz, dw, *args):
         self.plotBuffer[0].append(x)
@@ -27,8 +31,14 @@ class Plotter:
         self.derivativePlotBuffer[2].append(dz)
         self.derivativePlotBuffer[3].append(dw)
 
-        for el in args:
-            self.controlInputs.append(el)
+        if self.config['usePositiveControl']:
+            for el in args:
+                self.controlInputs.append(el)
+        else:
+            self.controlInput0.append(args[0])
+            self.controlInput1.append(args[1])
+            self.controlInput2.append(args[2])
+            self.controlInput3.append(args[3])
 
         if self.plot and len(self.plotBuffer[0]) == min(self.config['plotSize'], self.config['it']) and not self.config['compareIC']:
             if self.config['plotEvolution']:
@@ -86,9 +96,17 @@ class Plotter:
         ax.plot((self.dt * np.array(list(range(len(v2))))).tolist(), v2, label = 'snake',linewidth=3)
         ax.plot((self.dt * np.array(list(range(len(v3))))).tolist(), v3, label = 'deer',linewidth=3)
         ax.plot((self.dt * np.array(list(range(len(v4))))).tolist(), v4, label = 'eagle',linewidth=3)
+        animals = ['rabbit', 'snake', 'deer', 'eagle']
         if plotinput:
-            for el in args:
-                ax.plot((self.dt * np.array(list(range(len(el))))).tolist(), el, '--', label = 'control input')
+            if self.config['usePositiveControl']:
+                for el in args:
+                    ax.plot((self.dt * np.array(list(range(len(el))))).tolist(), el, '--', label = 'control input')
+            else:
+                ax.plot((self.dt * np.array(list(range(len(self.controlInput0))))).tolist(), self.controlInput0, '--', label = 'control input ' + animals[0])
+                ax.plot((self.dt * np.array(list(range(len(self.controlInput1))))).tolist(), self.controlInput1, '--', label = 'control input ' + animals[1])
+                ax.plot((self.dt * np.array(list(range(len(self.controlInput2))))).tolist(), self.controlInput2, '--', label = 'control input ' + animals[2])
+                ax.plot((self.dt * np.array(list(range(len(self.controlInput3))))).tolist(), self.controlInput3, '--', label = 'control input ' + animals[3])
+            
         plt.xlabel('Time', fontsize = 16)
         plt.ylabel('Population size', fontsize = 16)
         ax.legend()
