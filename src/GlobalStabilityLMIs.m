@@ -1,6 +1,7 @@
 %% Parameters to tune: rates of snake depredation of eagle (X) and deer (Y)
 X = 0.0;
 Y = 0.0;
+
 %________________________________________________________________________
 %% Not to tune: these are our system dynamics 
 
